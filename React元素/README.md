@@ -1,3 +1,4 @@
+[文中代码链接](./index.html) | [下一节](../React组件/README.md)
 <h1 align="center">React元素</h1>
 
 大家都知道，组件由元素构成，我们这一节主要讨论以下两点
@@ -79,7 +80,4 @@ const React = {
   }
 }
 ```
-
-
-[文中代码链接](./index.html) | [下一节](../React组件/README.md)
 
