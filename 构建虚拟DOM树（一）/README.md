@@ -9,27 +9,35 @@
 先来看一下这个更加复杂，更加完善的虚拟dom节点长啥样
 
 ```js
+
 // 一个 fiber 对应了一个节点，
 function FiberNode (tag, pendingProps) {
-  // 节点可以是自定义组件<HelloWorld>，原生节点<div>。也可以是根节点HostRoot
-  // 因此fiber也有不同的类型，用tag表示。
-  // 为简化，只支持ClassComponent，HostRoot，HostComponent三个类型，其中
-  // ClassComponent表示用户自定义的 class 组件的 fiber，
-  // HostRoot表示根节点的 fiber，即调用ReactDOM.render时传入的第二个参数 container。
-  // HostComponent表示原生节点的 fiber，如<div>
+  /**
+  * 节点可以是自定义组件<HelloWorld>，原生节点<div>。也可以是根节点HostRoot
+  * 因此fiber也有不同的类型，用tag表示，为简化，只支持ClassComponent，HostRoot，HostComponent三个类型，其中
+  * ClassComponent表示用户自定义的 class 组件的 fiber，
+  * HostRoot表示根节点的 fiber，即调用ReactDOM.render时传入的第二个参数 container。
+  * HostComponent表示原生节点的 fiber，如<div>
+  */
   this.tag = tag
   
-  // 原生节点的type是标签类型，如div的type就是'div'
-  // 根节点的type是null
-  // class组件的type是它的构造函数
+  /** 
+  * 原生节点的type是标签类型，如div的type就是'div'
+  * 根节点的type是null
+  * class组件的type是它的构造函数
+  */
   this.type = null
   
-  // 原生节点的stateNode是其真实dom
-  // 根节点的stateNode是FiberRoot的实例，FiberRoot我们等一会讲
-  // class组件的stateNode是组件类的实例
+  /**
+  * 原生节点的stateNode是其真实dom
+  * 根节点的stateNode是FiberRoot的实例，FiberRoot我们等一会讲
+  * class组件的stateNode是组件类的实例
+  */
   this.stateNode = null
   
-  // return，child 和 sibling 这三个属性构造了一颗fiber树。如下图
+  /**
+  * return，child 和 sibling 这三个属性构造了一颗fiber树。如下图
+  */
   this.return = null
   this.child = null
   this.sibling = null
