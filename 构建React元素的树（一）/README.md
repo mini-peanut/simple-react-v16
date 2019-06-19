@@ -7,7 +7,7 @@
 要想实现这个功能，我们需要**两颗更加完善的树**，一棵树叫**current**，表示目前页面的状态，另一棵树叫**workInProgress**，它身上，保存着即将应用到页面的状态
 
 树由节点构成，这个节点被称之为fiber，作为一种数据结构，可以先看看人家长什么样子，我挑选了一些目前我认为很有必要知道的一些属性罗列了下来
-
+## Fiber结构
 ```js
 function FiberNode (tag, pendingProps) {
   /**
@@ -52,6 +52,7 @@ React为每个React元素创建了一个fiber node，并且因为我们有一个
 
 需注意的是根元素，除fiber中的属性外，还需要一些额外的属性，简化之后如下，我们通过实例化下面的构造函数来得到相关属性
 
+## React根组件结构
 ```js
 function FiberRootNode(containerInfo) {
   	// 当前fiber节点
@@ -61,8 +62,8 @@ function FiberRootNode(containerInfo) {
 }
 ```
 
+## 构建Fiber树
 现在，我们来实现一下，根据react元素的树，来创建fiber node 树。建树，先从根节点建起。
-
 ```js
 const ClassComponent = 2;
 const HostRoot = 5;
