@@ -34,17 +34,17 @@ function FiberNode (tag, pendingProps) {
   this.stateNode = null
   
   /**
+  * 前面说过，我们需要有两棵树进行比对，事实上，每一个节点都有“双生子”，也同样分为current节点和workInprogress节点， 它们通过alternate连接起来，
+  * 也就是说current.alternate等于workInProgress，而workInprogress.alternate即current
+  */
+  this.alternate = null
+  
+  /**
   * return，child 和 sibling 这三个属性构造了一颗fiber树。如下图
   */
   this.return = null
   this.child = null
   this.sibling = null
-  
-  /**
-  * 前面说过，我们需要有两棵树进行比对，事实上，每一个节点都有“双生子”，也同样分为current节点和workInprogress节点， 它们通过alternate连接起来，
-  * 也就是说current.alternate等于workInProgress，而workInprogress.alternate即current
-  */
-  this.alternate = null
 }
 ```
 ![](../assets/fiberTreeNodes.png)
