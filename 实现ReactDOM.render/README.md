@@ -127,7 +127,7 @@ Component.prototype.setState = function (partialState) {
 
 ![](../assets/陷入沉思.jpg)
 
-预知后事如何，请看[下一节：构建虚拟DOM树](../构建虚拟DOM树（一)/README.md)
+预知后事如何，请看[下一节：构建虚拟DOM树](../构建虚拟DOM树（一）/README.md)
 
 
 [文中代码链接](index.html)
