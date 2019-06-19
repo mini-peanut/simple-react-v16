@@ -25,9 +25,9 @@
 
 ## 📜目录
 
-1. [实现React.createElement](./实现React.createElement/README.md)
-2. [实现ReactDOM.render](./实现ReactDOM.render/README.md)
-3. [构建React元素的树（一）](构建React元素的树（一）/README.md)
+1. [React元素](React元素/README.md)
+2. [React组件](React组件/README.md)
+3. [React元素的树（一）](React元素的树（一）/README.md)
 
 ## 📚资料
 - [inside-fiber-in-depth-overview-of-the-new-reconciliation-algorithm-in-react](https://medium.com/react-in-depth/inside-fiber-in-depth-overview-of-the-new-reconciliation-algorithm-in-react-e1c04700ef6e): 译文 [深入React fiber架构及源码](https://zhuanlan.zhihu.com/p/57346388)

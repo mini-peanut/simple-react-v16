@@ -1,6 +1,6 @@
 <h1 align="center"> 构建React元素的树（一）</h1>
 
-我们先来回顾一下 [上一节](../实现ReactDOM.render/README.md) 最后提到的一个问题
+我们先来回顾一下 [上一节](../React组件/README.md) 最后提到的一个问题
 
 > 如果组件有一个状态改变了，是否要将整个应用重新渲染一遍？能否精准找到需要修改的dom，然后再进行性能消耗最小的更新呢？
 
@@ -52,7 +52,7 @@ React为每个React元素创建了一个fiber node，并且因为我们有一个
 
 需注意的是根元素，除fiber中的属性外，还需要一些额外的属性，简化之后如下，我们通过实例化下面的构造函数来得到相关属性
 
-## React根组件结构
+## 根组件结构
 ```js
 function FiberRootNode(containerInfo) {
   	// 当前fiber节点
