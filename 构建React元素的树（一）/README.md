@@ -47,12 +47,10 @@ function FiberNode (tag, pendingProps) {
   this.sibling = null
 }
 ```
-React为每个React元素创建了一个fiber node，并且因为我们有一个这些**元素的树**，所以我们将拥有一个fiber树
+React为每个React元素创建了一个fiber node，并且因为我们有一个这些**元素的树**，所以我们将拥有一颗fiber树
 ![](../assets/fiberTreeNodes.png)
 
-ok，现在我们就可以依据createElement返回的数据来创建fiber树了么？
 
-![](../assets/kedaya.jpg)
 
 
 未完待续….
