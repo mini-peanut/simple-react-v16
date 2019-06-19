@@ -11,7 +11,7 @@
 ```js
 // 一个 fiber 对应了一个节点，
 function FiberNode (tag, pendingProps) {
-  // 节点可以是自定义组件<HelloWorld>，原生节点<div>。也可以是根节点HostRoot，根节点的概念我们待会再讲
+  // 节点可以是自定义组件<HelloWorld>，原生节点<div>。也可以是根节点HostRoot
   // 因此fiber也有不同的类型，用tag表示。
   // 为简化，只支持ClassComponent，HostRoot，HostComponent三个类型，其中
   // ClassComponent表示用户自定义的 class 组件的 fiber，
