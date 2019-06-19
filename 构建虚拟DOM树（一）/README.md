@@ -9,7 +9,7 @@
 先来看一下这个更加复杂，更加完善的虚拟dom节点长啥样
 
 ```js
-interface Tag {
+const Tag = {
   ClassComponent: 1, // 表示用户自定义的 class 组件的 fiber
   HostRoot: 3,         // 表示根节点的 fiber，即调用ReactDOM.render时传入的第二个参数 container。
   HostComponent: 5      // 原生节点的 fiber，如<div>
