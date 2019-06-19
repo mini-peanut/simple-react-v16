@@ -9,17 +9,14 @@
 先来看一下这个更加复杂，更加完善的虚拟dom节点长啥样
 
 ```js
-const Tag = {
-  ClassComponent: 1, // 表示用户自定义的 class 组件的 fiber
-  HostRoot: 3,         // 表示根节点的 fiber，即调用ReactDOM.render时传入的第二个参数 container。
-  HostComponent: 5      // 原生节点的 fiber，如<div>
-}
-
 // 一个 fiber 对应了一个节点，
 function FiberNode (tag, pendingProps) {
   // 节点可以是自定义组件<HelloWorld>，原生节点<div>。也可以是根节点HostRoot，根节点的概念我们待会再讲
   // 因此fiber也有不同的类型，用tag表示。
-  // 为简化，只支持原生节点（HostComponent），根节点（HostRoot），原生节点（HostComponent）三个类型
+  // 为简化，只支持ClassComponent，HostRoot，HostComponent三个类型，其中
+  // ClassComponent表示用户自定义的 class 组件的 fiber，
+  // HostRoot表示根节点的 fiber，即调用ReactDOM.render时传入的第二个参数 container。
+  // HostComponent表示原生节点的 fiber，如<div>
   this.tag = tag
   
   // 原生节点的type是标签类型，如div的type就是'div'
@@ -38,7 +35,7 @@ function FiberNode (tag, pendingProps) {
   this.sibling = null
 }
 ```
-
+![](../assets/fiberTree.png)
 所以，生成虚拟dom的时候，需要将其和相应的更新机制，挂载到当前组件实例上
 
 ```js
