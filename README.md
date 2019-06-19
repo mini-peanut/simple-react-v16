@@ -1,5 +1,7 @@
-# simple-react-v16
-learning by doing，通过实现一个简单的react-v16来学习react
+<h1 align="center">simple-react-v16</h1>
+<div align="center">
+  learning by doing，通过实现一个简单的react-v16来学习react
+</div>
 
 ## 🌱背景
 很多同学都尝试学习过源码，背后的原因多种多样，有兴趣驱动，技术驱动，坑驱动，也有的是想获得一份比较满意的offer，因为如今很多面试官都喜欢问一些技术的实现原理。
