@@ -1,4 +1,4 @@
-## 构建React元素的树（一）
+<h1 align="center"> 构建React元素的树（一）</h1>
 
 我们先来回顾一下 [上一节](../实现ReactDOM.render/README.md) 最后提到的一个问题
 
