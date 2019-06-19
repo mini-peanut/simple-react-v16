@@ -4,8 +4,9 @@
 
 > 如果组件有一个状态改变了，是否要将整个应用重新渲染一遍？能否精准找到需要修改的dom，然后再进行性能消耗最小的更新呢？
 
-要想实现这个功能，我们需要**两颗更加复杂，更加完善的虚拟dom树**，并且需要将虚拟dom树中的虚拟节点和组件实例**连接**起来。
-树由节点构成，先来看一下节点长成啥样，在react里，节点我们叫它fiber
+要想实现这个功能，我们需要**两颗更加复杂，更加完善的虚拟dom树**，一棵树叫**current**，它代表着目前页面的状态，另一棵树叫**workInProgress**，在它身上，保存着即将应用到页面的更新
+
+树由节点构成，节点在react里，被称之为纤维，用英文表示就是**fiber**，我们来看下fiber的结构
 
 ```js
 function FiberNode (tag, pendingProps) {
@@ -38,12 +39,21 @@ function FiberNode (tag, pendingProps) {
   this.return = null
   this.child = null
   this.sibling = null
+  
+  /**
+  * 前面说过，我们需要有两棵树进行比对，事实上，每一个节点都有“双生子”，也同样分为current节点和workInprogress节点， 它们通过alternate连接起来，
+  * 也就是说current.alternate等于workInProgress，而workInprogress.alternate即current
+  */
+  this.alternate = null
 }
 ```
 ![](../assets/fiberTree.png)
 
 ok，现在节点有了，我们就可以依据节点的格式和dom树来生成fiber树了么？
-![](../assets/陷入沉思.jpg)
+
+![](../assets/kedaya.jpg)
+
+我们之前不是说过要有 两！颗！树！吗？
 
 接下来，生成这个虚拟DOM时，需要将其和相应的更新机制，挂载到当前组件实例上
 
