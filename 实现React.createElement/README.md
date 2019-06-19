@@ -61,32 +61,28 @@ const hello = React.createElement("div", {
 
 原来，中间还经过了react接手了一下，babel将type，key，props等等其他属性作为参数，调用React.createElement来创建了这个对象
 
-我们这一节，就是简单来实现一下React.createElement，这一段非常简单，大家可以自己先试试，
-
-
-为了更好理解，我之后的代码实现都会尽可能简单，以下是React.createElement的简单实现
+我们这一节，就是简单来实现一下React.createElement，这一段非常简单，大家可以自己先试试.
 
 ```js
 const React = {
   createElement (type, config, ...children) {
-  let props = {};
+    let props = {};
 
-  // 将第二个参数config和第三个参数children合并成一个
-  if (config !== null) {
-    props = _.defaultsDeep({}, config);
-  }
+    // 将第二个参数config和第三个参数children合并成一个
+    if (config !== null) {
+      props = _.defaultsDeep({}, config);
+    }
+    if (children.length >= 1) {
+      props.children = children.length === 1 ? children[0] : children
+    }
 
-  if (children.length >= 1) {
-    props.children = children.length === 1 ? children[0] : children
+    return {
+	type: type,
+	props: props
+    };
   }
-  
-  return {
-    type: type,
-    props: props
-  };
 }
 ```
-
 
 
 [文中代码链接](./index.html) | [下一节](../实现ReactDOM.render/README.md)
