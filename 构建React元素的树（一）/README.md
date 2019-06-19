@@ -4,9 +4,11 @@
 
 > 如果组件有一个状态改变了，是否要将整个应用重新渲染一遍？能否精准找到需要修改的dom，然后再进行性能消耗最小的更新呢？
 
-要想实现这个功能，我们需要**两颗更加复杂，更加完善的虚拟dom树**，一棵树叫**current**，它代表着目前页面的状态，另一棵树叫**workInProgress**，在它身上，保存着即将应用到页面的更新
+要想实现这个功能，我们需要**两颗更加完善的树**，一棵树叫**current**，它代表着目前页面的状态，另一棵树叫**workInProgress**，在它身上，保存着即将应用到页面的更新
 
-树由节点构成，节点在react里，被称之为纤维，用英文表示就是**fiber**，我们来看下fiber的结构
+树由节点构成，在react里，被称之为fiber，为什么叫fiber呢？事实上，在最开始的react的文档里，叫Virtual DOM，这个术语有助于早期向人们解释React，但它也引起了歧义，并且不再在React文档中使用。React的文档提供了一种更高层次的对这种机制的[描述](https://reactjs.org/docs/reconciliation.html) 
+
+>包含React元素的作用，生命周期方法和渲染方法，以及应用于组件子元素的diffing算法等相关内容
 
 ```js
 function FiberNode (tag, pendingProps) {
