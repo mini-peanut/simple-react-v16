@@ -61,7 +61,7 @@ function render (reactElement, container) {
   const Component = reactElement.type;
   // 实例化
   const inst = new Component();
-  // 将父节点挂载到实例上，方便后续曲用
+  // 将父节点挂载到实例上，方便后续调用
   inst.parent = container;
 	// 调用render获取子节点元素
   const children = inst.render();
