@@ -88,8 +88,8 @@ function render (reactElement, container) {
 function renderChildren(node) {
   const {type, props} = node;
   const dom = document.createElement(type);
-  // 定义驼峰的事件
-	const registrationNames = ['onClick'];
+  // 定义驼峰的事件，由于我们目前只用到onClick，所以只加这一个
+  const registrationNames = ['onClick'];
   
   _.entries(props).map(([key, value]) => {
     if (registrationNames.includes(key)) {
@@ -105,11 +105,7 @@ function renderChildren(node) {
 }
 ```
 
-
-
 接下来是**setState方法改变状态，同时更新界面内容**
-
-
 
 有同学会说，先改变状态，继续调用render，然后将返回的元素转成真实dom，直接插入到父元素就ok了呗，so easy！如下
 
@@ -131,13 +127,10 @@ Component.prototype.setState = function (partialState) {
 
 ![](../assets/陷入沉思.jpg)
 
-预知后事如何，请看下一节[构建虚拟DOM树](./lesson3/)
-
+预知后事如何，请看[下一节：构建虚拟DOM树](./lesson3/)
 
 
 [文中代码链接](index.html)
-
-[下一节：构建虚拟DOM树](../构建虚拟DOM树（一）/README.md) 
 
 [上一节：实现ReactElement](../实现React.createElement/README.md)   
 
