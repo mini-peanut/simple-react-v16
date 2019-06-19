@@ -1,8 +1,8 @@
-## 实现ReactDOM.render
+<h1 align="center"> 实现ReactDOM.render </h1>
 
-通过[上一节](../实现React.createElement/README.md)我们简单实现了React.createElement这个Api。元素构成组件，我们这一节主要探讨React组件以及如何将react组件的内容渲染到页面上
+通过[上一节](../实现React.createElement/README.md)我们简单了解了元素以及它的创建过程。而元素构成组件，我们这一节主要探讨React组件以及如何将react组件的内容渲染到页面上
 
-### 什么是react组件
+## 什么是react组件
 
 来自官网的定义
 
@@ -49,11 +49,11 @@ ReactDOM.render(<ClickCounter />, document.getElementById('app'))
 1. render中的内容被渲染到了页面上，控制台依次输出constructor,  componentDidMount
 3. 点击按钮后页面count加1，控制台依次输出addCount, componentDidUpdate
 
-### class组件的创建过程
+## class组件的创建过程
 
 以上的功能是如何实现的呢？先来看第一点
 
-#### 将内容渲染到页面上
+### 将内容渲染到页面上
 
 先来看第一点，这个很简单，实例化ClickCounter，调用render获取子节点元素，递归创建dom，插入到div#app上，就可以了，这一段大家可以先行自己实现一遍
 
@@ -85,7 +85,7 @@ function render (reactElement, container) {
 
 到这一步，我们将react和react-dom的链接注释掉，测试这一段代码是否能实现功能1
 
-#### setState触发页面更新
+### setState触发页面更新
 
 能看见的流程是，点击按钮后应该触发addCount方法，继而触发setState方法，setState方法改变状态，同时更新界面内容
 
@@ -131,7 +131,6 @@ Component.prototype.setState = function (partialState) {
 
 ![](../assets/陷入沉思.jpg)
 
-预知后事如何，请看[下一节：构建虚拟DOM树](../构建React元素的树（一）/README.md) 
+预知后事如何，请看下一节：构建虚拟DOM树
 
-### 代码
-[index.html](index.html)
+[代码](index.html) | [下一节：构建虚拟DOM树](../构建React元素的树（一）/README.md) 
