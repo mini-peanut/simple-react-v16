@@ -49,47 +49,9 @@ function FiberNode (tag, pendingProps) {
 ```
 ![](../assets/fiberTreeNodes.png)
 
-ok，现在节点有了，我们就可以依据节点的格式和dom树来生成fiber树了么？
+ok，现在我们就可以依据createElement返回的数据来创建fiber树了么？
 
 ![](../assets/kedaya.jpg)
-
-我们之前不是说过要有 两！颗！树！吗？
-
-接下来，生成这个虚拟DOM时，需要将其和相应的更新机制，挂载到当前组件实例上
-
-```js
-const inst = new AddCount() // 实例化
-// 给实例挂载上虚拟dom节点，我们叫它fiber
-inst._reactInternalFiber = fiber
-// 给实例挂上相应的更新机制
-inst.updater = {
-  enqueueSetState (inst, payload) {
-      // 根据自身实例获取当前组件的虚拟dom节点 fiber
-      const fiber = inst._reactInternalFiber
-      
-      // 创建一次更新
-      const update = createUpdate()
-      update.payload = payload
-    
-      // 将更新和当前的fiber入队列
-      enqueueUpdate(fiber, update)
-      // 执行更新
-      scheduleWork(fiber, expirationTime)
-  }
-}
-```
-当调用setState的时候，setState就可以直接通过this.updater.enqueueSetState来更新dom
-
-```js
-
-/**
-* 调用setState的时候，直接取updater里的enqueueSetState方法，传入this和待更新的state，触发更新
-*/
-Component.prototype.setState = function(partialState) {
-  this.updater.enqueueSetState(this, partialState)
-};
-
-```
 
 
 未完待续….
