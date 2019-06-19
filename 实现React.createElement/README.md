@@ -9,7 +9,7 @@
 
 为了方便调试，我们需要在我们的[html文件](./index.html)中添加几个包
 
-```
+```html
 <script src="../assets/react.development.js"></script>
 <script src="../assets/react-dom.development.js"></script>
 <script src="../assets/lodash.min.js"></script>
@@ -67,7 +67,8 @@ const hello = React.createElement("div", {
 为了更好理解，我之后的代码实现都会尽可能简单，以下是React.createElement的简单实现
 
 ```js
-const createElement = function(type, config, ...children) {
+const React = {
+  createElement (type, config, ...children) {
   let props = {};
 
   // 将第二个参数config和第三个参数children合并成一个
@@ -83,9 +84,6 @@ const createElement = function(type, config, ...children) {
     type: type,
     props: props
   };
-};
-const React = {
-  createElement
 }
 ```
 
