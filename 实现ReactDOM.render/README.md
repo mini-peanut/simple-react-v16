@@ -53,7 +53,7 @@ ReactDOM.render(<ClickCounter />, document.getElementById('app'))
 
 #### # 将render中的内容渲染到页面上
 
-先来看第一点，这个很简单，实例化AddCount，调用render获取子节点元素，递归创建dom，插入到div#app上，就可以了，这一段大家可以先行自己实现一遍
+先来看第一点，这个很简单，实例化ClickCounter，调用render获取子节点元素，递归创建dom，插入到div#app上，就可以了，这一段大家可以先行自己实现一遍
 
 以下是我的版本
 
