@@ -5,12 +5,9 @@
 > 如果组件有一个状态改变了，是否要将整个应用重新渲染一遍？能否精准找到需要修改的dom，然后再进行性能消耗最小的更新呢？
 
 要想实现这个功能，我们需要**两颗更加复杂，更加完善的虚拟dom树**，并且需要将虚拟dom树中的虚拟节点和组件实例**连接**起来。
-
-先来看一下这个更加复杂，更加完善的虚拟dom节点长啥样
+树由节点构成，先来看一下节点长成啥样，在react里，节点我们叫它fiber
 
 ```js
-
-// 一个 fiber 对应了一个节点，
 function FiberNode (tag, pendingProps) {
   /**
   * 节点可以是自定义组件<HelloWorld>，原生节点<div>。也可以是根节点HostRoot
@@ -44,6 +41,9 @@ function FiberNode (tag, pendingProps) {
 }
 ```
 ![](../assets/fiberTree.png)
+
+ok，现在节点有了，我们就可以依据节点的格式和dom树来生成fiber树了么？
+![](../assets/陷入沉思.jpg)
 
 接下来，生成这个虚拟DOM时，需要将其和相应的更新机制，挂载到当前组件实例上
 
