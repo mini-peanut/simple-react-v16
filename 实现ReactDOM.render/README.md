@@ -94,10 +94,13 @@ const dom = document.createElement(type);
 
 // 定义驼峰的事件，由于我们目前只用到onClick，所以只加这一个
 const registrationNames = ['onClick'];
+
 if (registrationNames.includes(key)) {
+
     // onClick再转为click，监听之
     // 有同学说这不就是脱裤子放屁？当然不是了，具体原因后面再谈，先可以自己多想想
     const eventType = key.slice(2).toLocaleLowerCase();
+    
     dom.addEventListener(eventType, value);
 }
 ```
@@ -110,11 +113,13 @@ if (registrationNames.includes(key)) {
 function Component(props) {
   this.props = props
 }
+
 Component.prototype.setState = function (partialState) {
   this.state = {
     ...this.state,
     ...partialState
   };
+  
   this.parent.innerHTML = '';
   this.parent.appendChild(renderChildren(this.render()));
 };
