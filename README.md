@@ -7,9 +7,9 @@ learning by doing，通过实现一个简单的react-v16来学习react
 而上来直接啃源码会稍稍有些难度，所以有些同学会去先去看一些源码解析的文章，然而最有效的方法莫过于learning by doing，通过逐步实现react来学习
 
 ## 提示
-**我们这个项目主要针对web端** 目前react是拆分成了多个package，因为只针对web端，所以会重点分析react，react-dom，react-reconciler这三个包
+**我们这个项目主要针对web端：** 目前react是拆分成了多个package，因为只针对web端，所以会重点分析react，react-dom，react-reconciler这三个包
 
-**本文中的代码做了很多简化**，去掉了一些错误处理，性能分析（Profiler API），服务器端渲染等等我不关心的功能，因为这对从来没有深入过 React 源码的同学来说过于复杂。
+**本文中的代码做了很多简化：**去掉了一些错误处理，性能分析（Profiler API），服务器端渲染等等我不关心的功能，因为这对从来没有深入过 React 源码的同学来说过于复杂。
 
 **初期文中的代码可能与源码差异较大**，为了方便理解，有时候会来一些简单粗暴的实现，在之后会纠正过来
 
