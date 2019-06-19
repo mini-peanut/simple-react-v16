@@ -1,3 +1,5 @@
+[代码](index.html) | [上一节: React元素](../React元素/README.md) | [下一节：React元素的树](../React元素的树（一）/README.md) 
+
 <h1 align="center"> React组件 </h1>
 
 通过[上一节](../React元素/README.md)我们简单了解了元素以及它的创建过程。而元素构成组件，我们这一节主要探讨React组件以及如何将react组件的内容渲染到页面上
@@ -133,6 +135,4 @@ React.Componet = Component
 
 ![](../assets/陷入沉思.jpg)
 
-预知后事如何，请看下一节：构建虚拟DOM树
-
-[代码](index.html) | [下一节：构建虚拟DOM树](../React元素的树（一）/README.md) 
+预知后事如何，请看[下一节：React元素的树](../React元素的树（一）/README.md) 
