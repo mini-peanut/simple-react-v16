@@ -24,8 +24,8 @@ learning by doing，通过实现一个简单的react-v16来学习react
 ## 目录
 
 1. [实现React.createElement](./实现React.createElement/README.md)
-1. [实现ReactDOM.render](./实现ReactDOM.render/README.md)
-1. [构建虚拟DOM树](./构建虚拟DOM树（一）/README.md)
+2. [实现ReactDOM.render](./实现ReactDOM.render/README.md)
+3. [构建虚拟DOM树](./构建虚拟DOM树（一）/README.md)
 
 ## 资料
-[inside-fiber-in-depth-overview-of-the-new-reconciliation-algorithm-in-react](https://medium.com/react-in-depth/inside-fiber-in-depth-overview-of-the-new-reconciliation-algorithm-in-react-e1c04700ef6e): 译文 [深入React fiber架构及源码](https://zhuanlan.zhihu.com/p/57346388)
+- [inside-fiber-in-depth-overview-of-the-new-reconciliation-algorithm-in-react](https://medium.com/react-in-depth/inside-fiber-in-depth-overview-of-the-new-reconciliation-algorithm-in-react-e1c04700ef6e): 译文 [深入React fiber架构及源码](https://zhuanlan.zhihu.com/p/57346388)
