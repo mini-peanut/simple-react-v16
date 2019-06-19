@@ -85,7 +85,7 @@ function render (reactElement, container) {
 
 到这一步，我们将react和react-dom的链接注释掉，测试这一段代码是否能实现功能1
 
-### setState触发页面更新
+### 触发页面更新
 
 能看见的流程是，点击按钮后应该触发addCount方法，继而触发setState方法，setState方法改变状态，同时更新界面内容
 
