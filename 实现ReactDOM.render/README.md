@@ -90,25 +90,15 @@ function render (reactElement, container) {
 首先是触发addCount方法，如何触发呢？onClick并不是原生dom的事件，因此事件这一块需要单独处理
 
 ```js
-function renderChildren(node) {
-  const {type, props} = node;
-  const dom = document.createElement(type);
-  
-  // 定义驼峰的事件，由于我们目前只用到onClick，所以只加这一个
-  const registrationNames = ['onClick'];
-  
-  _.entries(props).map(([key, value]) => {
-    if (registrationNames.includes(key)) {
-    
-      // onClick再转为click，监听之
-      // 有同学说这不就是脱裤子放屁？当然不是了，具体原因后面再谈，先可以自己多想想
-      let eventType = key.slice(2).toLocaleLowerCase();
-      dom.addEventListener(eventType, value);
-    }
-    // other statement
-  });
+const dom = document.createElement(type);
 
-  return dom
+// 定义驼峰的事件，由于我们目前只用到onClick，所以只加这一个
+const registrationNames = ['onClick'];
+if (registrationNames.includes(key)) {
+    // onClick再转为click，监听之
+    // 有同学说这不就是脱裤子放屁？当然不是了，具体原因后面再谈，先可以自己多想想
+    const eventType = key.slice(2).toLocaleLowerCase();
+    dom.addEventListener(eventType, value);
 }
 ```
 
