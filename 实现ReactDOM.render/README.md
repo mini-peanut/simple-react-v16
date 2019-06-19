@@ -1,6 +1,6 @@
 ## 实现ReactDOM.render
 
-通过[上一节](../实现React.createElement/README.md)我们简单实现了React.createElement这个Api。元素构成组件，我们这一节主要探讨React组件以及如和将react组件的内容渲染到页面上
+通过[上一节](../实现React.createElement/README.md)我们简单实现了React.createElement这个Api。元素构成组件，我们这一节主要探讨React组件以及如何将react组件的内容渲染到页面上
 
 ### 什么是react组件
 
@@ -50,7 +50,7 @@ ReactDOM.render(<AddCount />, document.getElementById('app'))
 
 ### class组件的创建过程
 
-##### # 将render中的内容渲染到页面上
+#### # 将render中的内容渲染到页面上
 
 先来看第一点，这个很简单，实例化AddCount，调用render获取子节点元素，递归创建dom，插入到div#app上，就可以了，这一段大家可以先行自己实现一遍
 
@@ -78,7 +78,7 @@ function render (reactElement, container) {
 
 到这一步，我们将react和react-dom的链接注释掉，测试这一段代码是否能实现功能1
 
-##### # 点击按钮后页面count加1，控制台依次输出addCount, componentDidUpdate。
+#### # 点击按钮后页面count加1，控制台依次输出addCount, componentDidUpdate。
 
 能看见的流程是，点击按钮后应该触发addCount方法，继而触发setState方法，setState方法改变状态，同时更新界面内容
 
