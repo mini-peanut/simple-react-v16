@@ -47,10 +47,48 @@ function FiberNode (tag, pendingProps) {
   this.sibling = null
 }
 ```
-React为每个React元素创建了一个fiber node，并且因为我们有一个这些**元素的树**，所以我们将拥有一颗fiber树
+React为每个React元素创建了一个fiber node，并且因为我们有一个这些**元素的树**，所以我们将拥有一颗fiber node树
 ![](../assets/fiberTreeNodes.png)
 
+需注意的是根元素，除fiber中的属性外，还需要一些额外的属性，简化之后如下，我们通过实例化根组件来得到相关属性
 
+```js
+function FiberRootNode(containerInfo) {
+  	// 当前fiber节点
+    this.current = null;
+  	// 根DOM节点， 即传入ReactDOM.render的第二个参数container
+    this.containerInfo = containerInfo;
+}
+```
 
+现在，我们来实现一下，根据react元素的树，来创建fiber node 树。建树，先从根节点建起。
+
+```js
+const ClassComponent = 2;
+const HostRoot = 5;
+const HostComponent = 7;
+
+function createFiberRoot (containerInfo) {
+  /**
+  * 创建根fiber的实例，注意root并非一个fiber，root.current才是fiber
+  */
+  const root = new FiberRootNode(containerInfo);
+  /**
+  * 创建根fiber节点
+  */
+  const uninitializedFiber = new FiberNode(HostRoot);
+  
+  /**
+  * 由构造函数FiberRootNode的注释，可知current代表着当前的fiber节点，赋予之
+  */
+  root.current = uninitializedFiber
+  /**
+  * 根据构造函数FiberNode中的注释，可知根fiber节点的stateNode是FiberRoot的实例，赋予之
+  */
+  uninitializedFiber.stateNode = root
+  
+  return root
+}
+```
 
 未完待续….
