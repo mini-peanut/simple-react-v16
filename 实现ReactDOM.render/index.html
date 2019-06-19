@@ -94,36 +94,37 @@
     </script>
     <div id="app"></div>
     <script type="text/babel">
-        class AddCount extends React.Component {
-            constructor () {
-                super();
-                console.log('constructor');
-                this.state = {
-                    count: 1
-                };
-                this.addCount = this.addCount.bind(this)
+        class ClickCounter extends Component{
+            constructor(props) {
+                super(props);
+                this.state = {count: 0};
+                this.handleClick = this.handleClick.bind(this);
+            console.log('constructor')
             }
-            addCount () {
-                console.log('addCount');
-                this.setState({count: this.state.count + 1})
+
+            handleClick() {
+                this.setState((state) => {
+                    return {count: state.count + 1};
+                });
             }
-            render () {
-                return (
-                    <div>
-                        <div>count: {this.state.count}</div>
-                        <button onClick={this.addCount}>点击 count + 1</button>
-                    </div>
-                )
-            }
+
             componentDidMount () {
                 console.log('componentDidMount')
             }
+
             componentDidUpdate () {
                 console.log('componentDidUpdate')
             }
+
+            render() {
+                return [
+                    <button key="1" onClick={this.handleClick}>Update counter</button>,
+                    <span key="2">{this.state.count}</span>
+                ]
+            }
         }
 
-        ReactDOM.render(<AddCount />, document.getElementById('app'));
+        ReactDOM.render(<ClickCounter />, document.getElementById('app'))
     </script>
 </body>
 </html>
