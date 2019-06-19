@@ -8,7 +8,9 @@
     <title>Document</title>
 </head>
 <body>
-    <script src="./assets/lodash.min.js"></script>
+    <script src="../assets/react.development.js"></script>
+    <script src="../assets/react-dom.development.js"></script>
+    <script src="../assets/lodash.min.js"></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.js"></script>
     <script>
         function Component(props) {
@@ -59,19 +61,11 @@
             const {type, props} = node;
             const dom = document.createElement(type);
 
-            function appendChild(childNode) {
-                if (['string', 'number'].some(val => typeof childNode === val)) {
-                    dom.textContent = childNode
-                } else {
-                    dom.appendChild(renderChildren(childNode))
-                }
-            }
-
             _.entries(props).map(([key, value]) => {
                 if (key === 'children') {
                     Array.isArray(value)
-                        ? value.map(child => appendChild(child))
-                        : appendChild(value)
+                        ? value.map(child => appendChild(dom, child))
+                        : appendChild(dom, value)
                 }
                 else if (registrationNames.includes(key)) {
                     let eventType = key.slice(2).toLocaleLowerCase();
@@ -86,38 +80,50 @@
             return dom
         }
 
+        function appendChild(parent, childNode) {
+            if (['string', 'number'].some(val => typeof childNode === val)) {
+                parent.textContent = childNode
+            } else {
+                parent.appendChild(renderChildren(childNode))
+            }
+        }
 
         const ReactDOM = {
             render
         };
     </script>
-    <div id="container"></div>
+    <div id="app"></div>
     <script type="text/babel">
-        class HelloWorld extends React.Component {
+        class AddCount extends React.Component {
             constructor () {
                 super();
+                console.log('constructor');
                 this.state = {
                     count: 1
                 };
+                this.addCount = this.addCount.bind(this)
             }
-            addCount = () => {
-                this.setState({count: this.state.count + 1});
-                console.log(this.state.count)
-            };
+            addCount () {
+                console.log('addCount');
+                this.setState({count: this.state.count + 1})
+            }
             render () {
                 return (
                     <div>
-                        <div>{this.state.count}</div>
-                        <button onClick={_ => this.addCount()}>+1</button>
+                        <div>count: {this.state.count}</div>
+                        <button onClick={this.addCount}>点击 count + 1</button>
                     </div>
                 )
             }
+            componentDidMount () {
+                console.log('componentDidMount')
+            }
+            componentDidUpdate () {
+                console.log('componentDidUpdate')
+            }
         }
 
-        ReactDOM.render(
-            <HelloWorld />,
-            document.getElementById('container')
-        );
+        ReactDOM.render(<AddCount />, document.getElementById('app'));
     </script>
 </body>
 </html>

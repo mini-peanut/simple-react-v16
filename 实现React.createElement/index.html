@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script src="../assets/react.development.js"></script>
+<script src="../assets/react-dom.development.js"></script>
+<script src="../assets/lodash.min.js"></script>
+<script src="https://unpkg.com/babel-standalone@6/babel.js"></script>
+<script>
+    const createElement = function(type, config, ...children) {
+        let props = {};
+
+        // 将第二个参数config和第三个参数children合并成一个
+        if (config !== null) {
+            props = _.defaultsDeep({}, config);
+        }
+
+        if (children.length >= 1) {
+            props.children = children.length === 1 ? children[0] : children
+        }
+
+        return {
+            type: type,
+            props: props
+        };
+    };
+    const React = {
+        createElement
+    }
+</script>
+<div id="container">Hello world</div>
+<script type="text/babel">
+    console.log(JSON.stringify(<div className="hello">hello world</div>))
+</script>
+</body>
+</html>
