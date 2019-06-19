@@ -36,7 +36,8 @@ function FiberNode (tag, pendingProps) {
 }
 ```
 ![](../assets/fiberTree.png)
-所以，生成虚拟dom的时候，需要将其和相应的更新机制，挂载到当前组件实例上
+
+接下来，生成这个虚拟DOM时，需要将其和相应的更新机制，挂载到当前组件实例上
 
 ```js
 const inst = new AddCount() // 实例化
