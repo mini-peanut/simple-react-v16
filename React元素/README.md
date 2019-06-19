@@ -43,7 +43,7 @@
 ## react元素的创建过程
 这个时候，有些朋友就有点懵了，这对象怎么长得和其他的不太一样啊，我们js的对象不是 一对花括号吗？ 
 
-我们可以打开这个[文件](./index.html)，在测试区输入```console.log(<h1>Hello, world</h1>)``` ，看看结果是什么
+我们可以打开这个[文件](./index.html)，在测试区输入```console.log(<h1 className="hello">Hello, world</h1>)``` ，看看结果是什么
 
 ```js
 {type:"div",key:null,props:{className:"hello",children:"hello world"}}
