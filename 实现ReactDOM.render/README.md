@@ -59,12 +59,16 @@ ReactDOM.render(<ClickCounter />, document.getElementById('app'))
 ```js
 function render (reactElement, container) {
   const Component = reactElement.type;
+  
   // 实例化
   const inst = new Component();
+  
   // 将父节点挂载到实例上，方便后续调用
   inst.parent = container;
-	// 调用render获取子节点元素
+  
+  // 调用render获取子节点元素
   const children = inst.render();
+  
   // 递归创建dom，插入到div#app上， 
   // renderChildren的具体代码在lesson2/index.html中查看
   container.appendChild(renderChildren(children))
@@ -88,11 +92,13 @@ function render (reactElement, container) {
 function renderChildren(node) {
   const {type, props} = node;
   const dom = document.createElement(type);
+  
   // 定义驼峰的事件，由于我们目前只用到onClick，所以只加这一个
   const registrationNames = ['onClick'];
   
   _.entries(props).map(([key, value]) => {
     if (registrationNames.includes(key)) {
+    
       // onClick再转为click，监听之
       // 有同学说这不就是脱裤子放屁？当然不是了，具体原因后面再谈，先可以自己多想想
       let eventType = key.slice(2).toLocaleLowerCase();
