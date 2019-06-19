@@ -2,7 +2,7 @@
 
 通过[上一节](../实现React.createElement/README.md)我们简单了解了元素以及它的创建过程。而元素构成组件，我们这一节主要探讨React组件以及如何将react组件的内容渲染到页面上
 
-## 什么是react组件
+## 什么是React组件
 
 来自官网的定义
 
@@ -49,7 +49,7 @@ ReactDOM.render(<ClickCounter />, document.getElementById('app'))
 1. render中的内容被渲染到了页面上，控制台依次输出constructor,  componentDidMount
 3. 点击按钮后页面count加1，控制台依次输出addCount, componentDidUpdate
 
-## class组件的创建过程
+## React组件的创建过程
 
 以上的功能是如何实现的呢？先来看第一点
 
