@@ -25,18 +25,19 @@ class ClickCounter extends Component{
         });
     }
 
+    componentDidMount () {
+    	console.log('componentDidMount')
+    }
+    
+    componentDidUpdate () {
+    	console.log('componentDidUpdate')
+    }
+    
     render() {
         return [
             <button key="1" onClick={this.handleClick}>Update counter</button>,
             <span key="2">{this.state.count}</span>
         ]
-    }
-    
-    componentDidMount () {
-    	console.log('componentDidMount')
-    }
-    componentDidUpdate () {
-    	console.log('componentDidUpdate')
     }
 }
 
@@ -133,11 +134,7 @@ Component.prototype.setState = function (partialState) {
 
 ![](../assets/陷入沉思.jpg)
 
-预知后事如何，请看[下一节：构建虚拟DOM树](../构建虚拟DOM树（一）/README.md)
+预知后事如何，请看[下一节：构建虚拟DOM树](../构建虚拟DOM树（一）/README.md) 
 
-
-[文中代码链接](index.html)
-
-[上一节：实现ReactElement](../实现React.createElement/README.md)   
-
-
+### 代码
+[index.html](index.html)
