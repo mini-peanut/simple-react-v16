@@ -16,7 +16,7 @@ class ClickCounter extends Component{
         super(props);
         this.state = {count: 0};
         this.handleClick = this.handleClick.bind(this);
-	console.log('constructor')
+				console.log('constructor')
     }
 
     handleClick() {
@@ -26,11 +26,11 @@ class ClickCounter extends Component{
     }
 
     componentDidMount () {
-    	console.log('componentDidMount')
+    		console.log('componentDidMount')
     }
     
     componentDidUpdate () {
-    	console.log('componentDidUpdate')
+    		console.log('componentDidUpdate')
     }
     
     render() {
@@ -44,14 +44,16 @@ class ClickCounter extends Component{
 ReactDOM.render(<ClickCounter />, document.getElementById('app'))
 ```
 
-还是老样子，我们打开[index.html]('.index/html')将开发区的内容注释掉，将react和react-dom的注释打开，将上面这段代码放入测试区，查看结果，可以看到以下功能
+打开[index.html]('.index/html')将开发区的内容注释掉，将react和react-dom的注释打开，将上面这段代码放入测试区，查看结果，可以看到
 
 1. render中的内容被渲染到了页面上，控制台依次输出constructor,  componentDidMount
 3. 点击按钮后页面count加1，控制台依次输出addCount, componentDidUpdate
 
 ### class组件的创建过程
 
-#### # 将render中的内容渲染到页面上
+以上的功能是如何实现的呢？先来看第一点
+
+#### 将内容渲染到页面上
 
 先来看第一点，这个很简单，实例化ClickCounter，调用render获取子节点元素，递归创建dom，插入到div#app上，就可以了，这一段大家可以先行自己实现一遍
 
@@ -83,7 +85,7 @@ function render (reactElement, container) {
 
 到这一步，我们将react和react-dom的链接注释掉，测试这一段代码是否能实现功能1
 
-#### # 点击按钮后页面count加1，控制台依次输出addCount, componentDidUpdate。
+#### setState触发页面更新
 
 能看见的流程是，点击按钮后应该触发addCount方法，继而触发setState方法，setState方法改变状态，同时更新界面内容
 
@@ -129,7 +131,7 @@ Component.prototype.setState = function (partialState) {
 
 ![](../assets/陷入沉思.jpg)
 
-预知后事如何，请看[下一节：构建虚拟DOM树](../构建虚拟DOM树（一）/README.md) 
+预知后事如何，请看[下一节：构建虚拟DOM树](../构建React元素的树（一）/README.md) 
 
 ### 代码
 [index.html](index.html)

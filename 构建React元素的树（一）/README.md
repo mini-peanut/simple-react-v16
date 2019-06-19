@@ -1,4 +1,4 @@
-## 构建虚拟DOM树（一）
+## 构建React元素的树（一）
 
 我们先来回顾一下 [上一节](../实现ReactDOM.render/README.md) 最后提到的一个问题
 
@@ -47,7 +47,7 @@ function FiberNode (tag, pendingProps) {
   this.alternate = null
 }
 ```
-![](../assets/fiberTree.png)
+![](../assets/fiberTreeNodes.png)
 
 ok，现在节点有了，我们就可以依据节点的格式和dom树来生成fiber树了么？
 
@@ -90,7 +90,6 @@ Component.prototype.setState = function(partialState) {
 };
 
 ```
-
 
 
 未完待续….
