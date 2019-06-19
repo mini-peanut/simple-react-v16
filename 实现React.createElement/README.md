@@ -89,7 +89,5 @@ const React = {
 
 
 
-[文中代码链接](./index.html)
-
-[下一节](../实现ReactDOM.render/README.md)
+[文中代码链接](./index.html) | [下一节](../实现ReactDOM.render/README.md)
 
