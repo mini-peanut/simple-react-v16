@@ -236,5 +236,6 @@ componentDidMount
 
 [文中代码链接](./lesson2/ReactComponent.js)
 
-[上一节：实现ReactElement](./实现ReactElement.md) [下一节：构建虚拟DOM树](./构建虚拟DOM树.md)
+[上一节：实现ReactElement](./实现ReactElement.md)     [下一节：构建虚拟DOM树](./构建虚拟DOM树.md)
+
 
