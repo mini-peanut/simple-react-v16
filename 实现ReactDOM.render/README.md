@@ -125,6 +125,8 @@ Component.prototype.setState = function (partialState) {
   this.parent.innerHTML = '';
   this.parent.appendChild(renderChildren(this.render()));
 };
+
+React.Componet = Component
 ```
 
 很好，but，如果组件有一个状态改变了，是否要将整个应用重新渲染一遍？能否精准找到需要修改的dom，然后再进行性能消耗最小的更新呢？
