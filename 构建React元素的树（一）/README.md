@@ -49,8 +49,7 @@ function FiberNode (tag, pendingProps) {
 ```
 React为每个React元素创建了一个fiber node，并且因为我们有一个这些**元素的树**，所以我们将拥有一颗fiber node树
 ![](../assets/fiberTreeNodes.png)
-
-需注意的是根元素，除fiber中的属性外，还需要一些额外的属性，简化之后如下，我们通过实例化根组件来得到相关属性
+需注意的是根元素，除fiber中的属性外，还需要一些额外的属性，简化之后如下，我们通过实例化下面的构造函数来得到相关属性
 
 ```js
 function FiberRootNode(containerInfo) {
