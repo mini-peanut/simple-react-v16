@@ -46,17 +46,13 @@
 我们可以打开这个[文件](./index.html)，在测试区输入```console.log(<h1>Hello, world</h1>)``` ，看看结果是什么
 
 ```js
-{"type":"div","key":null,"props":{"className":"hello","children":"hello world"}}
+{type:"div",key:null,props:{className:"hello",children:"hello world"}}
 ```
-
-
 
 原来，果真是一个对象，但这个对象是babel直接生成的么，我们打开[babel的官网](https://babeljs.io/repl/#?babili=false&browsers=&build=&builtIns=false&spec=false&loose=false&code_lz=GYVwdgxgLglg9mABACwKYBt1wBQEpEDeAUIogE6pQhlIA8AJjAG6IToCGAzpwHLsC2qALwByNJjgiAfAAkMWRAHc4ZdPQCEtAPSMmUgNxEAvkSA&debug=false&forceAllTransforms=false&shippedProposals=false&circleciRepo=&evaluate=false&fileSize=false&timeTravel=false&sourceType=module&lineWrap=true&presets=react&prettier=false&targets=&version=7.4.5&externalPlugins=)来转一下试试
 
 ```js
-const hello = React.createElement("div", {
-  className: "hello"
-}, "Hello world!");
+const hello = React.createElement("div", { className: "hello" }, "Hello world!");
 ```
 
 原来，中间还经过了react接手了一下，babel将type，key，props等等其他属性作为参数，调用React.createElement来创建了这个对象
