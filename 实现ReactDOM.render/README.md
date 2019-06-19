@@ -11,36 +11,36 @@
 精简一下，就是，react组件是函数，定义组件的方式可以是JavaScript函数和ES6的class，我们这一节主要探讨一下class组件的实现
 
 ```jsx
-class AddCount extends React.Component {
-  constructor () {
-    super();
-    console.log('constructor');
-    this.state = {
-      count: 1
-    };
-    this.addCount = this.addCount.bind(this)
-  }
-  addCount () {
-    console.log('addCount');
-    this.setState({count: this.state.count + 1})
-  }
-  render () {
-    return (
-      <div>
-        <div>count: {this.state.count}</div>
-        <button onClick={this.addCount}>点击 count + 1</button>
-      </div>
-    )
-  }
-  componentDidMount () {
-    console.log('componentDidMount')
-  }
-  componentDidUpdate () {
-    console.log('componentDidUpdate')
-  }
+class ClickCounter extends Component{
+    constructor(props) {
+        super(props);
+        this.state = {count: 0};
+        this.handleClick = this.handleClick.bind(this);
+	console.log('constructor')
+    }
+
+    handleClick() {
+        this.setState((state) => {
+            return {count: state.count + 1};
+        });
+    }
+
+    render() {
+        return [
+            <button key="1" onClick={this.handleClick}>Update counter</button>,
+            <span key="2">{this.state.count}</span>
+        ]
+    }
+    
+    componentDidMount () {
+    	console.log('componentDidMount')
+    }
+    componentDidUpdate () {
+    	console.log('componentDidUpdate')
+    }
 }
 
-ReactDOM.render(<AddCount />, document.getElementById('app'))
+ReactDOM.render(<ClickCounter />, document.getElementById('app'))
 ```
 
 还是老样子，我们打开[index.html]('.index/html')将开发区的内容注释掉，将react和react-dom的注释打开，将上面这段代码放入测试区，查看结果，可以看到以下功能
