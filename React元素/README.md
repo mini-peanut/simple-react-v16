@@ -73,8 +73,8 @@ const React = {
     }
 
     return {
-	type: type,
-	props: props
+			type: type,
+			props: props
     };
   }
 }
