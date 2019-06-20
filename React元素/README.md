@@ -2,8 +2,8 @@
 
 大家都知道，组件由元素构成，我们这一节主要讨论以下两点
 
-- 什么是react元素
-- react元素被创建的过程是怎样的
+- 什么是React元素
+- React元素被创建的过程是怎样的
 
 ## 准备工作
 
@@ -26,7 +26,7 @@
 
 当我们需要查看react已实现的功能时，将react和react-dom这两个包注释打开，将开发区注释掉
 
-## 什么是react元素
+## 什么是React元素
 
 我们首先来看官方的定义
 
@@ -40,10 +40,10 @@
 
 可以知道 ```<h1>Hello, world</h1>``` 这一段其实就是一个react元素，表面上看它像一个dom，但注意其中有一句是，**React 元素是创建开销极小的普通对象**，再精简一下就是  **React 元素是对象**
 
-## react元素的创建过程
+## React元素的创建过程
 这个时候，有些朋友就有点懵了，这对象怎么长得和其他的不太一样啊，我们js的对象不是 一对花括号吗？ 
 
-我们可以打开这个[文件](./index.html)，在测试区输入```console.log(<h1>Hello, world</h1>)``` ，看看结果是什么
+我们可以打开这个[文件](./index.html)，在测试区输入```console.log(<h1 className="hello">Hello, world</h1>)``` ，看看结果是什么
 
 ```js
 {type:"div",key:null,props:{className:"hello",children:"hello world"}}
@@ -79,7 +79,4 @@ const React = {
   }
 }
 ```
-
-
 [文中代码链接](./index.html) | [下一节](../React组件/README.md)
-
