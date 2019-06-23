@@ -1,6 +1,6 @@
 <h1 align="center">React协调工作</h1>
 
-通过上一节，我们创建了一颗Fiber树，但也由此引发了一系列问题，这些问题，都统一由React的调和工作（reconciliation）来完成
+通过上一节，我们创建了一颗Fiber树，但也由此引发了一系列问题，这些都统一由React的协调工作（reconciliation）来完成
 
 我们先来看看会由哪些遗留问题
 ## 遗留问题
