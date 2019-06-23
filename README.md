@@ -36,8 +36,8 @@
 4. [React协调机制](React协调机制/readme.md)
 
 ## 📚资料
+- [A Cartoon Intro to Fiber](https://www.youtube.com/watch?v=ZCuYPiUIONs&list=PLb0IAmt7-GS3fZ46IGFirdqKTIxlws7e0&index=5)
+- [Beyond React 16 by Dan Abramov](https://www.youtube.com/watch?v=v6iR3Zk4oDY)
 - [inside-fiber-in-depth-overview-of-the-new-reconciliation-algorithm-in-react](https://medium.com/react-in-depth/inside-fiber-in-depth-overview-of-the-new-reconciliation-algorithm-in-react-e1c04700ef6e): 译文 [深入React fiber架构及源码](https://zhuanlan.zhihu.com/p/57346388)
 - [the-how-and-why-on-reacts-usage-of-linked-list-in-fiber](https://medium.com/react-in-depth/the-how-and-why-on-reacts-usage-of-linked-list-in-fiber-67f1014d0eb7): 译文 [如何以及为什么React Fiber使用链表遍历组件树
 ](https://zhuanlan.zhihu.com/p/54196962)
-- [Beyond React 16 by Dan Abramov](https://www.youtube.com/watch?v=v6iR3Zk4oDY)
-- [A Cartoon Intro to Fiber](https://www.youtube.com/watch?v=ZCuYPiUIONs&list=PLb0IAmt7-GS3fZ46IGFirdqKTIxlws7e0&index=5)
