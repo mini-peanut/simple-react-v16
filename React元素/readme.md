@@ -79,4 +79,4 @@ const React = {
   }
 }
 ```
-[文中代码链接](./index.html) | [下一节](../React组件/README.md)
+[文中代码链接](./index.html) | [下一节](../React组件/readme.md)
