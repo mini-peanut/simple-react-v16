@@ -1,6 +1,11 @@
+<<<<<<< Updated upstream:React元素的树（一）/README.md
 <h1 align="center"> 构建React元素的树（一）</h1>
 
 先来回顾一下[上一节](../React组件/README.md)最后提到的一个问题
+=======
+<h1 align="center"> 构建React元素的树-FiberNode</h1>
+先来回顾一下 [上一节](../React组件/README.md) 最后提到的一个问题
+>>>>>>> Stashed changes:React元素的树/README.md
 
 > 如果组件有一个状态改变了，是否要将整个应用重新渲染一遍？能否精准找到需要修改的dom，然后再进行性能消耗最小的更新呢？
 
@@ -9,19 +14,12 @@
 树由节点构成，这个节点被称之为fiber，作为一种数据结构，可以先看看人家长什么样子，我挑选了一些目前我认为很有必要知道的一些属性罗列了下来
 ## Fiber节点
 ```js
-/**
- *
- * @param tag 定义fiber的类型。它在调和算法中用于确定需要完成的工作，工作取决于React元素的类型，为简化，仅介绍以下三个fiber类型
- *    - ClassComponent: 表示用户自定义的 class 组件的 fiber，
- *    - HostRoot:       表示根节点的 fiber，即调用ReactDOM.render时传入的第二个参数 container。
- *    - HostComponent:  表示原生节点的 fiber，如<div>
- *
- * @param pendingProps  已从 React 元素中的新数据更新并且需要应用于子组件或 DOM 元素的 props。
- * @constructor
- */
 function FiberNode (tag, pendingProps) {
     /**
-     * 参照params参数定义
+     * tag 定义fiber的类型。它在调和算法中用于确定需要完成的工作，工作取决于React元素的类型，为简化，仅介绍以下三个fiber类型
+     *    - ClassComponent: 表示用户自定义的 class 组件的 fiber，
+     *    - HostRoot:       表示根节点的 fiber，即调用ReactDOM.render时传入的第二个参数 container。
+     *    - HostComponent:  表示原生节点的 fiber，如<div>
      */
     this.tag = tag;
     /**
@@ -45,7 +43,7 @@ function FiberNode (tag, pendingProps) {
     this.alternate = null;
 
     /**
-     * 参照params参数定义
+     * 已从 React 元素中的新数据更新并且需要应用于子组件或 DOM 元素的 props。
      */
     this.pendingProps = pendingProps;
     /**
@@ -136,7 +134,7 @@ function createFiberRoot (containerInfo) {
 * class组件会继承自React.Component组件，而React.Component上会挂载isReactComponent这个属性
 * 所以如果你写了一个class组件ClickCounter，访问ClickCounter.prototype.isReactComponent会得到true
 */
-function shouldConstruct(Component: Function) {
+function shouldConstruct(Component) {
   const prototype = Component.prototype;
   return !!(prototype && prototype.isReactComponent);
 }
@@ -225,4 +223,4 @@ function beginWork (current, workInProgress) {
 
 在下一节，我们重点讲一下这三个work的实现
 
-[上一节：React组件](../React组件/README.md)
+[上一节：React组件](../React组件/README.md) | [下一节：React调和工作](../React调和工作/Readme.md)

@@ -29,7 +29,8 @@
 
 1. [React元素](React元素/README.md)
 2. [React组件](React组件/README.md)
-3. [React元素的树（一）](React元素的树（一）/README.md)
+3. [React元素的树](React元素的树/README.md)
+4. [React调和工作](React调和工作/Readme.md)
 
 ## 📚资料
 - [inside-fiber-in-depth-overview-of-the-new-reconciliation-algorithm-in-react](https://medium.com/react-in-depth/inside-fiber-in-depth-overview-of-the-new-reconciliation-algorithm-in-react-e1c04700ef6e): 译文 [深入React fiber架构及源码](https://zhuanlan.zhihu.com/p/57346388)

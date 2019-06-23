@@ -139,7 +139,6 @@ function createFiberTree (reactElement, container) {
 
 }
 
-
 function updateFiberRoot (element, root) {
     /**
      * 获取当前树，目前只有一个根节点
@@ -226,9 +225,9 @@ function beginWork (current, workInProgress) {
         case HostRoot: {
             return updateHostRoot(current, workInProgress)
         }
-        case HostComponent: {
-            return updateHostComponent(current, workInProgress)
-        }
+        // case HostComponent: {
+        //     return updateHostComponent(current, workInProgress)
+        // }
         default:
             throw new Error('unknown unit of work tag')
     }

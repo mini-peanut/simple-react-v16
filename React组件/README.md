@@ -134,4 +134,4 @@ React.Componet = Component
 ![](../assets/陷入沉思.jpg)
 
 预知后事如何，请看下一节
-[代码](index.html) | [上一节: React元素](../React元素/README.md) | [下一节：React元素的树](../React元素的树（一）/README.md) 
+[代码](index.html) | [上一节: React元素](../React元素/README.md) | [下一节：React元素的树](../React元素的树/README.md) 
