@@ -17,13 +17,17 @@
             this.props = props
         }
         Component.prototype.setState = function (partialState) {
+            if (typeof partialState === "function") {
+                partialState = partialState(this.state)
+            }
             this.state = {
                 ...this.state,
                 ...partialState
             };
             this.parent.innerHTML = '';
-            this.parent.appendChild(renderChildren(this.render()));
-
+            let children = this.render();
+            children = Array.isArray(children) ? children : [children];
+            children.map(item => this.parent.appendChild(renderChildren(item)))
         };
         const createElement = function(type, config, ...children) {
             let props = {};
@@ -53,8 +57,9 @@
             const inst = new Component();
             inst.parent = container;
 
-            const children = inst.render();
-            container.appendChild(renderChildren(children))
+            let children = inst.render();
+            children = Array.isArray(children) ? children : [children]
+            children.map(item => container.appendChild(renderChildren(item)))
         }
 
         function renderChildren(node) {
@@ -118,7 +123,7 @@
 
             render() {
                 return [
-                    <button key="1" onClick={this.handleClick}>Update counter</button>,
+                    <button key="1" onClick={_ => this.handleClick()}>Update counter</button>,
                     <span key="2">{this.state.count}</span>
                 ]
             }
