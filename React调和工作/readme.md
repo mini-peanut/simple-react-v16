@@ -1,7 +1,9 @@
 <h1 align="center">React协调工作</h1>
 
-## 疑惑
-通过上一节，我们创建了一颗Fiber树，由此引发了一系列问题
+通过上一节，我们创建了一颗Fiber树，但也由此引发了一系列问题，这些问题，都统一由React的调和工作（reconciliation）来完成
+
+## 遗留问题
+我们先来看看会由哪些问题
 
 - 创建的是current树，workInProgress树在哪？
 
@@ -9,15 +11,12 @@
 
 - 创建之后又是如何进行对比分析得出差异的呢
 
-- 生命周期何时执行？
-
 - 得到差异后又是如何应用到dom上的呢
 
 ![](../assets/listen-to-me.jpg)
 
 
-上面提到的这些问题，在react里，统一被称作协调工作，英文为reconciliation，我们一个一个来看
-
+我们先一个一个来看
 #### # workInProgress树在哪
 
 workInProgress树和current树通过alternate属性连接了起来，我们可以通过curret.alternate属性访问
