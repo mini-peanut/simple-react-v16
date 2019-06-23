@@ -157,11 +157,7 @@ function createFiberRoot (containerInfo) {
 
 ![](../assets/walkTree.gif)
 
-
-
-现在，我们基于上面的过程，来实现这个算法
-
-### 将fiber连接起来
+所以现在，我们要做的就是，要将**fiber互相连接起来**
 
 细心的朋友可能会发现，我们刚刚定义的createFiberFromTypeAndProps方法，并没有给节点挂载上return，sibling，child这三个属性，使用这个方法创建的fiber，还是独立的，并未和任何其他的fiber产生关联。
 
