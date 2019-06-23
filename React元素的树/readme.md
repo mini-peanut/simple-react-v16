@@ -1,4 +1,4 @@
-<h1 align="center"> 构建React元素的树（一）</h1>
+<h1 align="center"> 构建React元素的树</h1>
 先来回顾一下[上一节](../React组件/readme.md)最后提到的一个问题
 
 > 如果组件有一个状态改变了，是否要将整个应用重新渲染一遍？能否精准找到需要修改的dom，然后再进行性能消耗最小的更新呢？
@@ -266,6 +266,6 @@ function createChild (returnFiber, newChild) {
 
 ![](../assets/wandan.jpeg)
 
-嗯，确实如此，因为想要找到哪里变了，我们需要两颗树，到目前为止，我们才创建了一棵，所以想真正了解具体对比的细节，请看下一节 React调和工作
+原来🤔️，最后的答案，被藏到了[这里](../React调和工作/readme.md) 
 
  [上一节: React组件](../React元素/readme.md) | [下一节：React调和工作](../React调和工作/readme.md) 
