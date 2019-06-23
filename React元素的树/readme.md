@@ -104,7 +104,7 @@ function shouldConstruct(Component) {
 
 ## Fiber容器
 
-react为Fiber树添加了一个容器，容器保存了当前fiber树，以及dom容器等顶级元素
+React为Fiber树添加了一个容器，容器保存了当前fiber树，以及dom容器等顶级元素
 
 ```js
 function FiberRootNode(containerInfo) {
@@ -116,6 +116,7 @@ function FiberRootNode(containerInfo) {
 ```
 
 ## 创建Fiber容器
+
 同样，知道Fiber容器数据格式之后，我们可以通过dom容器来创建一个Fiber容器
 ```js
 const ClassComponent = 2;
