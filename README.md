@@ -18,7 +18,7 @@
 **可能与源码差异较大:** 为了方便理解，有时候会来一些简单粗暴的实现，在之后会纠正过来
 
 ## 🚣技巧
-[learning-by-doing](https://en.wikipedia.org/wiki/Learning-by-doing_(economics))
+[边做边学](https://en.wikipedia.org/wiki/Learning-by-doing_(economics))
 > 边做边学是经济学理论中的一个概念，生产力是通过实践、自我完善和小创新来实现的。肯尼斯•阿罗在他的内生增长理论设计中使用了“边做边学”的概念来解释创新和技术变革的影响。
 
 项目中的每个文件夹都有可以跑起来的index.html文件，读者可以先注释掉，自己实现一遍，来加深印象
