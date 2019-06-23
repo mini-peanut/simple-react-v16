@@ -104,7 +104,7 @@ function shouldConstruct(Component) {
 
 ## Fiber容器
 
-Fiber容器保存了当前fiber树，以及dom容器等顶级元素
+react为Fiber树添加了一个容器，容器保存了当前fiber树，以及dom容器等顶级元素
 
 ```js
 function FiberRootNode(containerInfo) {
