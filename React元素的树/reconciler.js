@@ -146,19 +146,9 @@ function updateFiberRoot (element, root) {
     const current = root.current;
 
     /**
-     * 之前说过必须要有两颗树才可以对比，所以现在我们再基于current创建一棵树，workInProgress
-     */
-    const nextUnitOfWork = createWorkInProgress(current, null);
-
-    /**
      * 自上而下，遍历react元素树节点，为每一个节点添加child，return，sibling属性，构建fiber树
      * @type {null}
      */
-    while (nextUnitOfWork !== null) {
-        nextUnitOfWork = performUnitOfWork(nextUnitOfWork)
-    }
-
-    return root
 }
 
 /**
