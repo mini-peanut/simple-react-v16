@@ -1,11 +1,4 @@
 <h1 align="center"> 构建React元素的树（一）</h1>
-
-## 本文结构
-- [Fiber节点](#Fiber节点)
-- [Fiber容器](#Fiber容器)
-- [构建Fiber树](#构建Fiber树)
-    - [调和]()
-    - [工作]()
     
 先来回顾一下[上一节](../React组件/README.md)最后提到的一个问题
 
@@ -174,5 +167,4 @@ function createFiberFromTypeAndProps (type, props) {
 
 现在我们能够创建根节点和子节点了，需要做的就是遍历react元素的树，使用fiber节点上的以下属性：child，sibling和return来构成一个fiber node的linked list(链表)
 
-在实现之前，我们还需要知道几个知识点 **reconciliation** 和 **work**
 
