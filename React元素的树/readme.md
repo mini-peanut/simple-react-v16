@@ -174,7 +174,7 @@ function createChild (returnFiber, newChild) {
 }
 ```
 
-很多情况下，一个父节点会有多个子节点，因此我们需要创建一个方法，创建子组件的时候，同时将兄弟元素联系起来
+很多情况下，一个父节点会有多个子节点，因此我们需要创建一个方法，创建子节点的时候，同时将兄弟元素联系起来
 
 ```js
 function reconcileChildrenArray(returnFiber, childArray) {
