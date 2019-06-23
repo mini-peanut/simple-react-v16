@@ -1,7 +1,5 @@
 <h1 align="center">React协调机制</h1>
 
-## 回顾
-
 通过上一节，我们创建了一颗Fiber树，但也由此引发了一系列问题，比如
 
 - 创建的是current树，workInProgress树在哪？
