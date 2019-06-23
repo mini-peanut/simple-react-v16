@@ -1,13 +1,12 @@
 <h1 align="center">React协调机制</h1>
 
-## 回顾
-
 通过上一节，我们创建了一颗Fiber树，但也由此引发了一系列问题，比如
 
 - 创建的是current树，workInProgress树在哪？
 - workInProgress树是何时创建的，如何创建的？
 - 创建之后又是如何进行对比分析得出差异的呢
 - 得到差异后又是如何应用到dom上的呢
+- ......
 
 而这些工作都统一由React的协调机制（reconciliation）来完成，而具体的过程是怎么样的呢？
 
@@ -51,3 +50,4 @@ function createWorkInProgress(current, pendingProps) {
 }
 ```
 
+未完待续.......
