@@ -149,7 +149,7 @@ function createFiberRoot (containerInfo) {
 ```
 
 ## 构建Fiber树
-到现在我们可以创建Fiber容器，以及根据reactElement来创建fiber节点了，需要做的就是遍历react元素的树，使用fiber节点上的以下属性：child，sibling和return来构成一个fiber node的linked list(链表)
+到现在我们可以创建Fiber容器，以及根据reactElement来创建fiber节点了，需要做的就是遍历react元素的树，创建fiber。
 
 我们先来看一下遍历的过程，当React从树上下来时，可以看到当前活动的fiber节点发生了变化，可以清楚地看到算法如何从一个分支转到另一个分支。它首先完成child 节点的工作，然后转移到parent身边
 
@@ -157,11 +157,9 @@ function createFiberRoot (containerInfo) {
 
 ![](../assets/walkTree.gif)
 
-所以现在，我们要做的就是，要将**fiber互相连接起来**
-
 细心的朋友可能会发现，我们刚刚定义的createFiberFromTypeAndProps方法，并没有给节点挂载上return，sibling，child这三个属性，使用这个方法创建的fiber，还是独立的，并未和任何其他的fiber产生关联。
 
-因此，我们除了遍历react元素的树，生成fiber节点之外，还需要做一部分工作，将它们连接起来。
+因此，我们除了遍历react元素的树，生成fiber节点之外，还需要做一部分工作，**将它们连接起来**。
 
 一步步来，首先定义一个创建子节点的方法，通过return属性将父子属性关联起来
 
