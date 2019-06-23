@@ -1,11 +1,6 @@
-<<<<<<< Updated upstream:React元素的树（一）/README.md
 <h1 align="center"> 构建React元素的树（一）</h1>
 
 先来回顾一下[上一节](../React组件/README.md)最后提到的一个问题
-=======
-<h1 align="center"> 构建React元素的树-FiberNode</h1>
-先来回顾一下 [上一节](../React组件/README.md) 最后提到的一个问题
->>>>>>> Stashed changes:React元素的树/README.md
 
 > 如果组件有一个状态改变了，是否要将整个应用重新渲染一遍？能否精准找到需要修改的dom，然后再进行性能消耗最小的更新呢？
 
