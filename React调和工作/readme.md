@@ -17,11 +17,11 @@
 
 
 我们先一个一个来看
-#### # workInProgress树在哪
+### workInProgress树在哪
 
 workInProgress树和current树通过alternate属性连接了起来，我们可以通过curret.alternate属性访问
 
-#### # workInProgress树是何时创建的，如何创建的
+### workInProgress树是何时创建的，如何创建的
 
 workInProgress树是基于current树来创建的，所以自然是需要等到current树创建完事之后，再创建，源码在[createWorkInProgress](https://github.com/facebook/react/blob/master/packages/react-reconciler/src/ReactFiber.js#L381)中，我们这里还是来一段简单的
 
@@ -59,7 +59,7 @@ function createWorkInProgress(current, pendingProps) {
 }
 ```
 
-#### # 创建之后是如何对比分析出差异的呢
+### 创建之后是如何对比分析出差异的呢
 
 我们还是以最开始的ClickCounter组件为例子
 
