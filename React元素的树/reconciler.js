@@ -8,7 +8,7 @@ let nextUnitOfWork = null;
 let shouldTrackSideEffects = true;
 /**
  *
- * @param tag 定义fiber的类型。它在调和算法中用于确定需要完成的工作，工作取决于React元素的类型，为简化，仅介绍以下三个fiber类型
+ * @param tag 定义fiber的类型。它在协调算法中用于确定需要完成的工作，工作取决于React元素的类型，为简化，仅介绍以下三个fiber类型
  *    - ClassComponent: 表示用户自定义的 class 组件的 fiber，
  *    - HostRoot:       表示根节点的 fiber，即调用ReactDOM.render时传入的第二个参数 container。
  *    - HostComponent:  表示原生节点的 fiber，如<div>
