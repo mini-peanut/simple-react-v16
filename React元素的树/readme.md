@@ -268,4 +268,4 @@ function createChild (returnFiber, newChild) {
 
 不要急😊，篇幅太长，不利于阅读，最后的答案，请看[下一节](../React调和工作/readme.md)
 
- [上一节: React组件](../React元素/readme.md) | [下一节：React协调工作](../React协调工作/readme.md) 
+ [上一节: React组件](../React元素/readme.md) | [下一节：React协调工作](../React调和工作/readme.md) 
