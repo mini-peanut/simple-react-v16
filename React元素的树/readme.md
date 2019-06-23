@@ -59,11 +59,52 @@ function FiberNode (tag, pendingProps) {
 React为每个React元素创建了一个fiber node，并且因为我们有一个这些**元素的树**，所以我们将拥有一颗fiber node树
 ![](../assets/fiberTreeNodes.png)
 
+## 创建Fiber节点
 
+有了节点的数据格式之后，我们就可以通过createElement返回的数据来创建fiber，react源码在[createFiberFromTypeAndProps](https://github.com/facebook/react/blob/769b1f270e1251d9dbdce0fcbd9e92e502d059b8/packages/react-reconciler/src/ReactFiber.js#L414)中，我们可以来实现一个简单版本，将主干逻辑梳理出来
+
+```js
+const FunctionComponent = 0; // JavaScript函数组件
+const ClassComponent = 1;    // ES6的class组件
+const IndeterminateComponent = 2; // 目前还不知道是JavaScript函数还是ES6的class
+const HostComponent = 5;     // 原生dom组件
+
+function createFiberFromTypeAndProps (type, props) {
+  /**
+  * 先根据type判断这是一个什么类型的组件
+  * class组件的type是其构造函数，hostComponent的type是标签类型，如<div></div>的type是‘div’
+  */
+  let fiberTag = IndeterminateComponent
+  
+  if (_.isString(type)) {
+    fiberTag = HostComponent
+  }
+  
+  if (_.isFunction(type) && shouldConstruct(type)) {
+    fiberTag = ClassComponent
+  }
+
+  const fiber = new FiberNode(fiberTag, props)
+  fiber.type = type
+  
+  return fiber
+}
+
+/**
+* React.Component上会挂载isReactComponent这个属性
+* 当我们的class组件继承React.Component的时候，xxx.prototype.isReactComponent就是true
+*/
+function shouldConstruct(Component) {
+  const prototype = Component.prototype;
+  return !!(prototype && prototype.isReactComponent);
+}
+
+
+```
 
 ## Fiber容器
 
-React为每个dom容器创建一个了一个Fiber容器FiberRoot，FiberRoot 保存了当前fiber树，以及dom容器等顶级元素
+Fiber容器保存了当前fiber树，以及dom容器等顶级元素
 
 ```js
 function FiberRootNode(containerInfo) {
@@ -74,11 +115,8 @@ function FiberRootNode(containerInfo) {
 }
 ```
 
-## 构建Fiber树
-### 创建根节点
-
-现在，我们开始创建fiber树。建树，先从根节点建起。fiber 树以特殊类型的fiber节点（HostRoot）开始。它在内部创建并充当最顶层组件的父级
-
+## 创建Fiber容器
+同样，知道Fiber容器数据格式之后，我们可以通过dom容器来创建一个Fiber容器
 ```js
 const ClassComponent = 2;
 const HostRoot = 5;
@@ -110,52 +148,8 @@ function createFiberRoot (containerInfo) {
 }
 ```
 
-### 创建子节点
-
-接下来根据createElement返回的数据来创建fiber，react源码在[createFiberFromTypeAndProps](https://github.com/facebook/react/blob/769b1f270e1251d9dbdce0fcbd9e92e502d059b8/packages/react-reconciler/src/ReactFiber.js#L414)中，我们可以来实现一个简单版本，将主干逻辑梳理出来
-
-```js
-const FunctionComponent = 0; // JavaScript函数组件
-const ClassComponent = 1;    // ES6的class组件
-const IndeterminateComponent = 2; // 目前还不知道是JavaScript函数还是ES6的class
-const HostComponent = 5;     // 原生dom组件
-
-/**
-* class组件会继承自React.Component组件，而React.Component上会挂载isReactComponent这个属性
-* 所以如果你写了一个class组件ClickCounter，访问ClickCounter.prototype.isReactComponent会得到true
-*/
-function shouldConstruct(Component) {
-  const prototype = Component.prototype;
-  return !!(prototype && prototype.isReactComponent);
-}
-
-function createFiberFromTypeAndProps (type, props) {
-  /**
-  * 先根据type判断这是一个什么类型的组件
-  * class组件的type是其构造函数，hostComponent的type是标签类型，如<div></div>的type是‘div’
-  */
-  let fiberTag = IndeterminateComponent
-  
-  if (_.isFunction(type) && shouldConstruct(type)) {
-    fiberTag = ClassComponent
-  }
-  
-  if (_.isString(type)) {
-    fiberTag = HostComponent
-  }
-  /**
-  * 根据fiberTag创建fiber
-  */
-  const fiber = new FiberNode(fiberTag, props)
-  fiber.type = type
-  
-  return fiber
-}
-```
-
-### 构建Fiber树
-
-现在我们能够创建根节点和子节点了，需要做的就是遍历react元素的树，使用fiber节点上的以下属性：child，sibling和return来构成一个fiber node的linked list(链表)
+## 构建Fiber树
+到现在我们可以创建Fiber容器，以及根据reactElement来创建fiber节点了，需要做的就是遍历react元素的树，使用fiber节点上的以下属性：child，sibling和return来构成一个fiber node的linked list(链表)
 
 我们先来看一下遍历的过程，当React从树上下来时，可以看到当前活动的fiber节点发生了变化，可以清楚地看到算法如何从一个分支转到另一个分支。它首先完成child 节点的工作，然后转移到parent身边
 
@@ -163,9 +157,17 @@ function createFiberFromTypeAndProps (type, props) {
 
 ![](../assets/walkTree.gif)
 
-现在，我们基于上面的过程，来实现这个算法,
 
-首先定义一个创建子节点的方法，通过return属性将父子属性关联起来
+
+现在，我们基于上面的过程，来实现这个算法
+
+### 将fiber连接起来
+
+细心的朋友可能会发现，我们刚刚定义的createFiberFromTypeAndProps方法，并没有给节点挂载上return，sibling，child这三个属性，使用这个方法创建的fiber，还是独立的，并未和任何其他的fiber产生关联。
+
+因此，我们除了遍历react元素的树，生成fiber节点之外，还需要做一部分工作，将它们连接起来。
+
+一步步来，首先定义一个创建子节点的方法，通过return属性将父子属性关联起来
 
 ```js
 function createChild (returnFiber, newChild) {
@@ -178,7 +180,7 @@ function createChild (returnFiber, newChild) {
 }
 ```
 
-很多情况下，一个父节点会有多个子节点，因此我们需要创建一个方法，创建子组件的时候，将兄弟元素联系起来
+很多情况下，一个父节点会有多个子节点，因此我们需要创建一个方法，创建子组件的时候，同时将兄弟元素联系起来
 
 ```js
 function reconcileChildrenArray(returnFiber, childArray) {
@@ -207,22 +209,19 @@ function reconcileChildrenArray(returnFiber, childArray) {
 }
 ```
 
-到现在，我们只需要创建一个容器，调用根组件，递归调用reconcileChildrenArray，就可以生成这颗fiber树了
+
+
+到这里，大部分工作就做完了，最后我们再将它们整理起来，变成一个可用的功能，实现方法createFiberTree
+
+流程就是，创建Fiber容器，递归调用element，创建fiber树，完事之后，赋值给current树
 
 ```js
 function createFiberTree (reactElement, container) {
-    // 1. 创建fiber容器
-    let root = container._reactRootContainer;
-
-    if (!root) {
-        root = container._reactRootContainer = createFiberRoot(container)
-    }
-
-    // 2. 用reactElement去更新容器
-    updateFiberRoot(reactElement, root);
-
+    // 1. 创建fiber容器，给dom也挂一个属性，方面后面查找
+    let root = container._reactRootContainer = createFiberRoot(container)
+    
+    updateFiberRoot(element, root)
     return root
-
 }
 
 function updateFiberRoot (element, root) {
@@ -234,7 +233,6 @@ function updateFiberRoot (element, root) {
 }
 
 /**
- *
  * @param returnFiber 父节点的fiber
  * @param newChild 子节点react元素
  * @returns {*}
