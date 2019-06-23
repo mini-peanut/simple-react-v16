@@ -207,7 +207,12 @@ function reconcileChildrenArray(returnFiber, childArray) {
 
 到这里，大部分工作就做完了，最后我们再将它们整理起来，变成一个可用的功能，实现方法createFiberTree
 
-流程就是，创建Fiber容器，递归调用element，创建fiber树，完事之后，赋值给current树
+流程就是，创建Fiber容器，递归调用element，创建fiber树，完事之后，赋值给current树，大家可以自己尝试实现一遍
+
+![](../assets/understand.jpg)
+
+以下是我的版本，仅供参考
+
 
 ```js
 function createFiberTree (reactElement, container) {
@@ -237,3 +242,30 @@ function reconcileChildFibers(returnFiber, newChild) {
 }
 ```
 
+有的同学说不对，你这里没有递归，只做了根组件这一层，我想说，是滴，我们还需要改造一下createChild这个方法
+
+```js
+function createChild (returnFiber, newChild) {
+    if (typeof newChild === 'object' && newChild !== null) {
+        let created = createFiberFromTypeAndProps(newChild);
+      	
+      	// 这里根据newChild的type和props来递归调用reconcileChildFibers方法
+      	// 如果是ClassComponent，则实例化，render得到子元素
+      	// 如果是HostComponent，children就是子元素
+      	// 这里给大家留点发挥的空间吧，看能否实现一下
+        created.return = returnFiber;
+        return created
+    }
+    return null
+}
+```
+
+
+
+到这里，有同学就会说了，大哥，你bb了这么多，但是好像还是没有解答我们最开始的那个问题呢
+
+![](../assets/wandan.jpeg)
+
+嗯，确实如此，因为想要找到哪里变了，我们需要两颗树，到目前为止，我们才创建了一棵，所以想真正了解具体对比的细节，请看下一节 React调和工作
+
+ [上一节: React组件](../React元素/readme.md) | [下一节：React调和工作](../React调和工作/readme.md) 
