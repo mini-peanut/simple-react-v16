@@ -1,3 +1,8 @@
+function shouldConstruct(Component) {
+    const prototype = Component.prototype;
+    return !!(prototype && prototype.isReactComponent);
+}
+
 /**
  * 根据react元素来创建fiber
  * @param type

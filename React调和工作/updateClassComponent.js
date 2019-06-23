@@ -1,6 +1,39 @@
 /**
  *
  * @param current
+ * @param pendingProps
+ * @returns {*|FiberNode}
+ */
+function createWorkInProgress(current, pendingProps) {
+    let workInProgress = current.alternate;
+
+    if (workInProgress === null) {
+        workInProgress = new FiberNode(current.tag, pendingProps);
+        /**
+         * workInProgress树通过alternate属性连接上current树
+         */
+        workInProgress.alternate = current;
+    }
+
+    workInProgress.type = /*         */current.type;
+    workInProgress.stateNode = /*    */current.stateNode;
+    workInProgress.child = /*        */current.child;
+    workInProgress.memoizedProps = /**/current.memoizedProps;
+    workInProgress.updateQueue = /*  */current.updateQueue;
+    workInProgress.sibling = /*      */current.sibling;
+
+    /**
+     * 同上，current树通过alternate属性连接上workInProgress树，两棵树通过这个属性互相连接起来
+     * @type {FiberNode}
+     */
+    current.alternate = workInProgress;
+
+    return workInProgress
+}
+
+/**
+ *
+ * @param current
  * @param workInProgress
  * @param Component
  * @param nextProps

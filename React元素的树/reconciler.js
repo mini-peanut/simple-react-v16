@@ -116,16 +116,14 @@ function createFiberRoot (containerInfo) {
 }
 
 /**
- * class组件会继承自React.Component组件，而React.Component上会挂载isReactComponent这个属性
- * 所以如果你写了一个class组件ClickCounter，访问ClickCounter.prototype.isReactComponent会得到true
+ * 我们第一步首先要创建一个fiber容器，然后每次有状态变化就去更新它，开始的时候，我们需要将我们整个应用都插入进去
+ *
+ * @param reactElement react元素
+ * @param container dom容器
+ * @returns {FiberRootNode}
  */
-function shouldConstruct(Component) {
-    const prototype = Component.prototype;
-    return !!(prototype && prototype.isReactComponent);
-}
-
 function createFiberTree (reactElement, container) {
-    // 1. 创建fiber容器
+    //
     let root = container._reactRootContainer;
 
     if (!root) {
@@ -146,120 +144,78 @@ function updateFiberRoot (element, root) {
     const current = root.current;
 
     /**
-     * 自上而下，遍历react元素树节点，为每一个节点添加child，return，sibling属性，构建fiber树
-     * @type {null}
+     * 遍历React元素树生成fiber树
      */
+    reconcileChildFibers(current, element)
 }
 
 /**
  *
- * @param current
- * @param pendingProps
- * @returns {*|FiberNode}
+ * @param returnFiber 父节点的fiber
+ * @param newChild 子节点react元素
+ * @returns {*}
  */
-function createWorkInProgress(current, pendingProps) {
-    let workInProgress = current.alternate;
+function reconcileChildFibers(returnFiber, newChild) {
+    const childArray = Array.isArray(newChild) ? newChild : [newChild];
+    return reconcileChildrenArray(returnFiber, childArray)
+}
 
-    if (workInProgress === null) {
-        workInProgress = new FiberNode(current.tag, pendingProps);
+/**
+ * 遍历children，生成fiber
+ * @param returnFiber
+ * @param childArray
+ * @returns {FiberNode}
+ */
+function reconcileChildrenArray(returnFiber, childArray) {
+    let resultingFirstChild = null;
+    let previousNewFiber = null;
+    let newIdx = 0;
+
+    for (; newIdx < childArray.length; newIdx++) {
+        let _newFiber = createChild(returnFiber, childArray[newIdx]);
+
         /**
-         * workInProgress树通过alternate属性连接上current树
+         * 我们需要返回的时returnFiber的第一个子节点
          */
-        workInProgress.alternate = current;
+        if (resultingFirstChild === null) {
+            resultingFirstChild = _newFiber
+        }
+        /**
+         * 如果有多个child，则给前一个fiber设置sibling属性指向当前fiber
+         */
+        else {
+            previousNewFiber.sibling = _newFiber
+        }
+        previousNewFiber = _newFiber
     }
-
-    workInProgress.type = /*         */current.type;
-    workInProgress.stateNode = /*    */current.stateNode;
-    workInProgress.child = /*        */current.child;
-    workInProgress.memoizedProps = /**/current.memoizedProps;
-    workInProgress.updateQueue = /*  */current.updateQueue;
-    workInProgress.sibling = /*      */current.sibling;
-
-    /**
-     * 同上，current树通过alternate属性连接上workInProgress树，两棵树通过这个属性互相连接起来
-     * @type {FiberNode}
-     */
-    current.alternate = workInProgress;
-
-    return workInProgress
+    return resultingFirstChild
 }
 
-/**
- * @param workInProgress 父节点
- * @returns {FiberNode} 子节点
- */
-function performUnitOfWork (workInProgress) {
-    const current = workInProgress.alternate;
-    let next = null;
-    next = beginWork(current, workInProgress, nextRenderExpirationTime);
-    // if (next === null) {
-    //     next = completeUnitOfWork(workInProgress)
-    // }
-    return next
+function createChild (returnFiber, newChild) {
+    if (typeof newChild === 'object' && newChild !== null) {
+        let created = createFiberFromTypeAndProps(newChild);
+        created.return = returnFiber;
+        return created
+    }
+    return null
 }
 
-/**
- * 根据tag的类型，不断构建子节点
- * @param current 当前树
- * @param workInProgress 工作树
- * @returns {FiberNode|*}
- */
-function beginWork (current, workInProgress) {
-    workInProgress.expirationTime = NoWork;
+function beginWork (current, workInProgress, renderExpirationTime) {
     const Component = workInProgress.type;
-    const unresolvedProps = workInProgress.pendingProps;
+    const unresolvedProps = workInProgress.pendingProps
     switch (workInProgress.tag) {
         case ClassComponent: {
-            return updateClassComponent(current, workInProgress, Component, unresolvedProps)
+            return updateClassComponent(current, workInProgress, Component, unresolvedProps, renderExpirationTime)
         }
         case HostRoot: {
-            return updateHostRoot(current, workInProgress)
+            return updateHostRoot(current, workInProgress, renderExpirationTime)
         }
-        // case HostComponent: {
-        //     return updateHostComponent(current, workInProgress)
-        // }
+        case HostComponent: {
+            return updateHostComponent(current, workInProgress, renderExpirationTime)
+        }
         default:
             throw new Error('unknown unit of work tag')
     }
-}
-
-function updateHostRoot (current, workInProgress) {
-    const updateQueue = workInProgress.updateQueue;
-    const prevState = workInProgress.memoizedState;
-    const prevChildren = prevState !== null ? prevState.element : null;
-    processUpdateQueue(workInProgress, updateQueue);
-    const nextState = workInProgress.memoizedState;
-    const nextChildren = nextState.element;
-    if (nextChildren === prevChildren) {
-        cloneChildFibers(workInProgress);
-        return workInProgress.child
-    }
-    reconcileChildren(current, workInProgress, nextChildren);
-    return workInProgress.child
-}
-
-function processUpdateQueue (workInProgress, queue) {
-    // Iterate through the list of updates to compute the result.
-    let update = queue.firstUpdate;
-    let resultState = queue.baseState;
-    while (update !== null) {
-        resultState = getStateFromUpdate(update, resultState);
-        update = update.next
-    }
-    queue.baseState = resultState;
-    queue.firstUpdate = queue.lastUpdate = null;
-    workInProgress.expirationTime = NoWork;
-    workInProgress.memoizedState = resultState
-}
-
-function getStateFromUpdate (update, prevState) {
-    const partialState = update.payload
-    if (partialState === null || partialState === undefined) {
-        // Null and undefined are treated as no-ops.
-        return prevState
-    }
-    // Merge the partial state and the previous state.
-    return Object.assign({}, prevState, partialState)
 }
 
 ReactDOM.createFiberTree = createFiberTree;
