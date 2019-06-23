@@ -1,5 +1,12 @@
 <h1 align="center"> 构建React元素的树（一）</h1>
 
+## 本文结构
+- [Fiber节点](#Fiber节点)
+- [Fiber容器](#Fiber容器)
+- [构建Fiber树](#构建Fiber树)
+    - [调和]()
+    - [工作]()
+    
 先来回顾一下[上一节](../React组件/README.md)最后提到的一个问题
 
 > 如果组件有一个状态改变了，是否要将整个应用重新渲染一遍？能否精准找到需要修改的dom，然后再进行性能消耗最小的更新呢？
@@ -167,55 +174,5 @@ function createFiberFromTypeAndProps (type, props) {
 
 现在我们能够创建根节点和子节点了，需要做的就是遍历react元素的树，使用fiber节点上的以下属性：child，sibling和return来构成一个fiber node的linked list(链表)
 
-这里我们需要知道几个知识点
+在实现之前，我们还需要知道几个知识点 **reconciliation** 和 **work**
 
-#### 调和（reconciliation）
-
-React是一个用于构建UI的JavaScript库，其[核心](https://link.zhihu.com/?target=https%3A//medium.freecodecamp.org/what-every-front-end-developer-should-know-about-change-detection-in-angular-and-react-508f83f58c6a)是跟踪组件状态变化并将更新到view上。在React中，我们将此过程视为调和**reconciliation**
-
-#### 工作 (work)
-
-React会在**调和**期间执行各种活动。例如，以下是React在上面这个程序中第一次渲染和状态更新之后执行的高级操作：
-
-1. 更新state中的count属性
-2. 检索并比较ClickCounter子组件以及props
-3. 更新span元素的props
-
-同时，在调和期间，还会执行其他活动包括[调用生命周期方法](https://link.zhihu.com/?target=https%3A//reactjs.org/docs/react-component.html%23updating)或[更新引用](https://link.zhihu.com/?target=https%3A//reactjs.org/docs/refs-and-the-dom.html)。所有这些活动在fiber架构中统称为“work”。
-
-**work类型通常取决于React元素的类型**。例如，对于class组件，React需要创建实例，而不是为function组件执行此操作。
-
-#### 开始工作（beginWork）
-
-由于我们只重点研究ClassComponent，HostRoot，HostComponent这三个fiber类型，所以我们也只需实现这三个不同类型的work就可以了
-
-```js
-/**
- * 根据tag的类型，不断构建子节点
- * @param current 当前树
- * @param workInProgress 工作树
- * @returns {FiberNode|*}
- */
-function beginWork (current, workInProgress) {
-    workInProgress.expirationTime = NoWork;
-    const Component = workInProgress.type;
-    const unresolvedProps = workInProgress.pendingProps;
-    switch (workInProgress.tag) {
-        case ClassComponent: {
-            return updateClassComponent(current, workInProgress, Component, unresolvedProps)
-        }
-        case HostRoot: {
-            return updateHostRoot(current, workInProgress)
-        }
-        case HostComponent: {
-            return updateHostComponent(current, workInProgress)
-        }
-        default:
-            throw new Error('unknown unit of work tag')
-    }
-}
-```
-
-在下一节，我们重点讲一下这三个work的实现
-
-[上一节：React组件](../React组件/README.md) | [下一节：React调和工作](../React调和工作/Readme.md)
