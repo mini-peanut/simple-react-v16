@@ -1,5 +1,11 @@
 <h1 align="center"> React副作用 </h1>
 
+通过上一节，我们创建了一颗工作树，工作树上有即将应用到current树的fiber，以及即将应用到页面的dom，那么，当组件的状态改变的时候，又发生了哪些事呢？我们这一节，就来探讨这个问题
+
+我们还是以ClickCounter为例，当点击按钮，state从0变成1，页面是如何更新的
+
+## React副作用
+
 React副作用（effect），我们以程序员的视角来看这两个东西。
 
 所谓[副作用](https://zh-hans.reactjs.org/docs/hooks-overview.html#effect-hook)，其实也是fiber，它会通过一个属性effectTag来标识是那种类型的副作用，其枚举值源码在[这里](https://github.com/facebook/react/blob/504576306461a5ff339dc99691842f0f35a8bf4c/packages/shared/ReactSideEffectTags.js)查看，这里就挑几个作为示例
@@ -28,6 +34,3 @@ React通过firstEffect指针来确定列表的起始位置，之后通过nextEff
 
 
 
-effect是如何生成的呢？当我们拿当前树和工作树对比的时候，首先会得知道是什么
-
-当我们某一个节点发生改变的时候，我们先判断firstEffect有没有值，如果没有，
