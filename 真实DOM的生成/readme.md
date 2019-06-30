@@ -160,7 +160,7 @@ function updateHostComponent (current, workInProgress, renderExpirationTime) {
 }
 ```
 
-接下来就是这个completeUnitOfWork，这个方法，自底向上构建dom节点，并依附在fiber上，来简单实现一下
+接下来就是这个completeUnitOfWork，这个方法，初次渲染的时候，自底向上构建dom节点，并依附在fiber上，来简单实现一下
 
 ```js
 // 首先这个workInprogress是最底端的fiberNode，例如相对于b2的那一枝，到这里workInprogress就是底部的d1
@@ -170,7 +170,7 @@ function completeUnitOfWork (workInProgress) {
       const returnFiber = workInProgress.return
       const siblingFiber = workInProgress.sibling
       
-      // completeWork就是生成真实dom，然后挂载到fiber的stateNode上，然后返回下一个节点的指针
+      // 初次渲染的时候，completeWork就是生成真实dom，然后挂载到fiber的stateNode上，然后返回下一个节点的指针
       completeWork(current, workInProgress)
 
       if (siblingFiber !== null) {
@@ -190,7 +190,8 @@ function completeUnitOfWork (workInProgress) {
 这里面逻辑就是，从底部开始，一步步生成dom，然后返回下一个节点的指针，接下来实现一下completeWork
 
 ```js
-// 为了简单理解，这里也只针对hostComponent
+// 为了简单理解，这里也只针对hostComponent，且是第一次渲染的情况
+// 第二次更新的时候，会对比props，如果有差异，就标记为待更新Update
 function completeWork (current, workInProgress) {
   const newProps = workInProgress.pendingProps
   const type = workInProgress.type

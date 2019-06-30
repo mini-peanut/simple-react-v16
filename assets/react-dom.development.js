@@ -13153,6 +13153,8 @@
   var classComponentUpdater = {
     isMounted: isMounted,
     enqueueSetState: function (inst, payload, callback) {
+      console.log(workInProgress)
+      debugger
       var fiber = get(inst);
       var currentTime = requestCurrentTime();
       var suspenseConfig = requestCurrentSuspenseConfig();
