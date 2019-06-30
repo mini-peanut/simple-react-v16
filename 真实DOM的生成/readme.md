@@ -53,7 +53,7 @@ function createWorkInProgress(current, pendingProps) {
 render() {
   return [
     <button key="b1" id="b1" onClick={_ => this.handleClick()}>点击按钮+1</button>,
-  	<div key="b2" id="b2"><span id="c1"><b id="d1">{this.state.count}</b></span></div>,
+    <div key="b2" id="b2"><span id="c1"><b id="d1">{this.state.count}</b></span></div>,
     <div key="b3" id="b3"><span id="c2">{this.state.count}</span></div>
   ]
 }
