@@ -33,7 +33,7 @@
 1. [React元素](React元素/readme.md)
 2. [React组件](React组件/readme.md)
 3. [React元素的树](React元素的树/readme.md)
-4. [真实DOM的生成](React副作用/readme.md)
+4. [真实DOM的生成](真实DOM的生成/readme.md)
 4. [React副作用](React副作用/readme.md)
 
 ## 📚资料
