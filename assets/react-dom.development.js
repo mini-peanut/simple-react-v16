@@ -9009,6 +9009,7 @@
   }
 
   function createElement(type, props, rootContainerElement, parentNamespace) {
+    console.log('createElement: ', type, props)
     var isCustomComponentTag = void 0;
 
     // We create tags in the namespace of their parent container, except HTML
@@ -21313,7 +21314,6 @@
       // If this doesn't spawn new work, complete the current work.
       next = completeUnitOfWork(unitOfWork);
     }
-
     ReactCurrentOwner$2.current = null;
     return next;
   }
@@ -21328,7 +21328,6 @@
       // need an additional field on the work in progress.
       var current$$1 = workInProgress.alternate;
       var returnFiber = workInProgress.return;
-
       // Check if the work completed or if something threw.
       if ((workInProgress.effectTag & Incomplete) === NoEffect) {
         setCurrentFiber(workInProgress);
@@ -21441,6 +21440,7 @@
     if (workInProgressRootExitStatus === RootIncomplete) {
       workInProgressRootExitStatus = RootCompleted;
     }
+
     return null;
   }
 
@@ -21506,6 +21506,12 @@
   }
 
   function commitRoot(root) {
+    var currentEffect = root.current.alternate.firstEffect;
+    // console.log(root)
+    while (currentEffect) {
+      // console.log(currentEffect.effectTag, currentEffect.stateNode);
+      currentEffect = currentEffect.nextEffect
+    }
     runWithPriority(ImmediatePriority, commitRootImpl.bind(null, root));
     // If there are passive effects, schedule a callback to flush them. This goes
     // outside commitRootImpl so that it inherits the priority of the render.
@@ -22958,6 +22964,7 @@
   }
 
   function createFiberFromElement(element, mode, expirationTime) {
+    console.log('createFiber: ', element.type, element.props);
     var owner = null;
     {
       owner = element._owner;

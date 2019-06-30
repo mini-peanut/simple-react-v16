@@ -8,12 +8,12 @@
     <title>Document</title>
 </head>
 <body>
-<!--<script src="../assets/react.development.js"></script>-->
-<script src="./react.js"></script>
-<!--<script src="../assets/react-dom.development.js"></script>-->
-<script src="../React协调工作/updateClassComponent.js"></script>
-<script src="./reconciler.js"></script>
-<script src="./react-dom.js"></script>
+<script src="../assets/react.development.js"></script>
+<!--<script src="./react.js"></script>-->
+<script src="../assets/react-dom.development.js"></script>
+<!--<script src="../React协调工作/updateClassComponent.js"></script>-->
+<!--<script src="./reconciler.js"></script>-->
+<!--<script src="./react-dom.js"></script>-->
 <script src="../assets/lodash.min.js"></script>
 <script src="https://unpkg.com/babel-standalone@6/babel.js"></script>
 <div id="app"></div>
@@ -22,11 +22,11 @@
 </script>
 <script type="text/babel">
     class ClickCounter extends React.Component{
+        state;
         constructor(props) {
             super(props);
             this.state = {count: 0};
             this.handleClick = this.handleClick.bind(this);
-            console.log('constructor')
         }
 
         handleClick() {
@@ -36,23 +36,25 @@
         }
 
         componentDidMount () {
-            console.log('componentDidMount')
         }
 
         componentDidUpdate () {
-            console.log('componentDidUpdate')
         }
 
         render() {
             return [
-                <button key="1" onClick={_ => this.handleClick()}>Update counter</button>,
-                <span key="2">{this.state.count}</span>
+                <button key="b1" id="b1" onClick={_ => this.handleClick()}>点击按钮+1</button>,
+                <div key="b2" id="b2">
+                    <span id="c1"><b id="d1">{this.state.count}</b></span>
+                    <span id="c2">hhh</span>
+                </div>,
+                <div key="b3" id="b3"><span id="c3">{this.state.count}</span></div>
             ]
         }
     }
 
     ReactDOM.render(<ClickCounter />, document.getElementById('app'));
-    console.log(ReactDOM.createFiberTree(<ClickCounter />, document.getElementById('app')))
+    // console.log(ReactDOM.createFiberTree(<ClickCounter />, document.getElementById('app')))
 </script>
 </body>
 </html>

@@ -60,6 +60,8 @@ function FiberNode (tag, pendingProps) {
 React为每个React元素创建了一个fiber node，并且因为我们有一个这些**元素的树**，所以我们将拥有一颗fiber node树
 ![](../assets/fiberTreeNodes.png)
 
+<div align="center">图 3-1</div>
+
 ## 创建Fiber节点
 
 有了节点的数据格式之后，就可通过createElement返回的数据来创建fiber，源码在[createFiberFromTypeAndProps](https://github.com/facebook/react/blob/769b1f270e1251d9dbdce0fcbd9e92e502d059b8/packages/react-reconciler/src/ReactFiber.js#L414)中，我们可以来实现一个简单版本，将主干逻辑梳理出来
@@ -155,9 +157,11 @@ function createFiberRoot (containerInfo) {
 
 我们先来看一下遍历的过程，当React从树上下来时，可以看到当前活动的fiber节点发生了变化，可以清楚地看到算法如何从一个分支转到另一个分支。它首先完成child 节点的工作，然后转移到parent身边
 
-注意的是：b2是b1的兄弟节点，而不是子节点，b都是a的子节点，c1是b2的子节点，c2是b3的子节点
+> 注意，垂直连接表示sibling，而弯曲的连接表示child，例如b1没有child，而b2有一个childc1.
 
 ![](../assets/walkTree.gif)
+
+<div align="center">图3-2</div>
 
 细心的朋友可能会发现，我们刚刚定义的createFiberFromTypeAndProps方法，并没有给节点挂载上return，sibling，child这三个属性，使用这个方法创建的fiber，还是独立的，并未和任何其他的fiber产生关联。
 
@@ -264,10 +268,10 @@ function createChild (returnFiber, newChild) {
 
 
 
-到这里，有同学就会说了，大哥，你bb了这么多，但是好像还是没有解答我们最开始的那个问题呢
+到这里，有同学就会说了，大哥，你bb了这么多，我什么时候能看到一个真正的dom啊
 
 ![](../assets/wandan.jpeg)
 
-不要急😊，篇幅太长，不利于阅读，最后的答案，请看[下一节](../React协调机制/readme.md)
+欲知后事如何，请看[下一节](../真实DOM的生成/readme.md)
 
- [上一节: React组件](../React元素/readme.md) | [下一节：React协调机制](../React协调机制/readme.md) 
+ [上一节: React组件](../React元素/readme.md) | [下一节：真实DOM的生成](../真实DOM的生成/readme.md) 
