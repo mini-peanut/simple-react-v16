@@ -238,3 +238,5 @@ function appendAllChildren (parent, workInProgress) {
 到这里，我们可以得到b1，b2，b3的真实节点了，将其依次插入到容器中，就可以渲染出真实到dom了
 
 到这一节，我们依然实现的是render操作，相对于前面简单粗暴的递归插入，我们将其与fiber树整合到了一起，下一节，我们来讨论一下React是如何处理更新的
+
+[上一节:React元素的树 ](../React元素的树/readme.md) | [下一节：React副作用](../React副作用/readme.md)

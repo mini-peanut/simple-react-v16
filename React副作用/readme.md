@@ -1,6 +1,6 @@
-**如何应用的呢？**
+<h1 align="center"> React副作用 </h1>
 
-这里面涉及到一个概念，副作用（effect），我们还是以前端程序员的视角来看这两个东西。
+React副作用（effect），我们以程序员的视角来看这两个东西。
 
 所谓[副作用](https://zh-hans.reactjs.org/docs/hooks-overview.html#effect-hook)，其实也是fiber，它会通过一个属性effectTag来标识是那种类型的副作用，其枚举值源码在[这里](https://github.com/facebook/react/blob/504576306461a5ff339dc99691842f0f35a8bf4c/packages/shared/ReactSideEffectTags.js)查看，这里就挑几个作为示例
 
