@@ -26,11 +26,11 @@ React 处理更新非常迅速，为了达到这种水平的性能，它采用�
 
 Dan Abramov 为副作用列表提供了一个类比。他喜欢将它想象成一棵圣诞树，「圣诞灯」将所有有效节点捆绑在一起。为了使这个可视化，让我们想象如下的 Fiber 节点树，其中标亮的节点有一些要做的工作。我们将需要做的任务通过一根线串起来，等到真正要执行的时候，我们从a1开始，将任务一个接一个地拿出来做
 
-![](/Users/huax/workspace/simple-react-v16/assets/patchEffect.png)
+![](../assets/patchEffect.png)
 
 React通过firstEffect指针来确定列表的起始位置，之后通过nextEffect属性将每个effect连接在一起，如下
 
-![](/Users/huax/workspace/simple-react-v16/assets/effect-list.png)
+![](../assets/effect-list.png)
 
 
 
