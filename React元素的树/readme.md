@@ -61,7 +61,6 @@ React为每个React元素创建了一个fiber node，并且因为我们有一个
 ![](../assets/fiberTreeNodes.png)
 
 <div align="center">图 3-1</div>
-
 ## 创建Fiber节点
 
 有了节点的数据格式之后，就可通过createElement返回的数据来创建fiber，源码在[createFiberFromTypeAndProps](https://github.com/facebook/react/blob/769b1f270e1251d9dbdce0fcbd9e92e502d059b8/packages/react-reconciler/src/ReactFiber.js#L414)中，我们可以来实现一个简单版本，将主干逻辑梳理出来
@@ -105,22 +104,27 @@ function shouldConstruct(Component) {
 
 ```
 
-## Fiber容器
+## 容器
 
 React为Fiber树添加了一个容器，容器保存了当前fiber树，以及dom容器等顶级元素
 
 ```js
 function FiberRootNode(containerInfo) {
-  	// 当前fiber树的顶级节点
+  	// current代表当前fiber树的顶级节点
     this.current = null;
-  	// 当前dom树的顶级容器节点，即传入ReactDOM.render的第二个参数container
+  	// containerInfo代表当前dom树的顶级容器节点
     this.containerInfo = containerInfo;
 }
 ```
 
-## 创建Fiber容器
+## 创建容器
 
-同样，知道Fiber容器数据格式之后，我们可以通过dom容器来创建一个Fiber容器
+同样，知道Fiber容器数据格式之后，我们可以通过dom容器来创建一个Fiber容器，这里做三件事
+
+1. 通过实例化FiberRootNode时传入的containerInfo给containerInfo赋值
+2. 实例化之后，创建一个根fiber节点给current赋值
+3. 顶层fiber节点的stateNode是容器的实例，赋予之
+
 ```js
 const ClassComponent = 2;
 const HostRoot = 5;
@@ -129,136 +133,118 @@ const HostComponent = 7;
  * @param containerInfo 真实dom容器
  * @returns {FiberRootNode}
  */
-function createFiberRoot (containerInfo) {
-    /**
-     * 创建fiber容器，注意这是一个容器而并非一个fiber，root.current才是fiber
-     */
+function createContainer (containerInfo) {
+    // 步骤1
     const root = new FiberRootNode(containerInfo);
-    /**
-     * 创建顶层fiber节点，HostRoot
-     */
+   	
+ 		// 步骤2
     const uninitializedFiber = new FiberNode(HostRoot);
-
-    /**
-     * 将fiber树的顶层节点赋予Fiber容器的current属性
-     */
     root.current = uninitializedFiber;
-    /**
-     * 根据构造函数FiberNode中的注释，可知顶层fiber节点的stateNode是FiberRoot的实例，赋予之
-     */
+    
+    // 步骤3
     uninitializedFiber.stateNode = root;
 
     return root
 }
 ```
 
-## 构建Fiber树
-到现在我们可以创建Fiber容器，以及根据reactElement来创建fiber节点了，需要做的就是遍历react元素的树，创建fiber。
-
-我们先来看一下遍历的过程，当React从树上下来时，可以看到当前活动的fiber节点发生了变化，可以清楚地看到算法如何从一个分支转到另一个分支。它首先完成child 节点的工作，然后转移到parent身边
-
-> 注意，垂直连接表示sibling，而弯曲的连接表示child，例如b1没有child，而b2有一个childc1.
-
-![](../assets/walkTree.gif)
-
-<div align="center">图3-2</div>
-
-细心的朋友可能会发现，我们刚刚定义的createFiberFromTypeAndProps方法，并没有给节点挂载上return，sibling，child这三个属性，使用这个方法创建的fiber，还是独立的，并未和任何其他的fiber产生关联。
-
-因此，我们除了遍历react元素的树，生成fiber节点之外，还需要做一部分工作，**将它们连接起来**。
-
-一步步来，首先定义一个创建子节点的方法，通过return属性将父子属性关联起来
+React初始化应用（即调用ReactDOM.render）的时候，会传入containerInfo，和reactElement，我们可以根据containerInfo构建容器，然后根据reactElement，构建fiber树。
 
 ```js
-function createChild (returnFiber, newChild) {
-    if (typeof newChild === 'object' && newChild !== null) {
-        let created = createFiberFromTypeAndProps(newChild);
-        created.return = returnFiber;
-        return created
+const ReactDOM = {
+    render (reactElement, container) {
+        let root = container._reactRootContainer;
+        if (!root) {
+          // 根据container创建容器root
+          root = container._reactRootContainer = createContainer(container)
+        }
+      	// 根据reactElement，更新现有容器root
+        updateContainer(reactElement, root)
     }
-    return null
+};
+```
+
+创建容器createContainer我们上面实现过了，我们下面来实现一下更新容器updateContainer
+
+
+
+## 首次更新容器 - 构建fiber树
+
+我们之前提到过fiber由三种类型的节点，HostRoot，HostComponent，ClassComponent，这三个不同类型的fiber节点，更新子节点的方式由些不一样
+
+HostRoot的节点，想要更新，需更新ReactDOM.render传入的第一个参数，我们将这个参数放到了更新队列里
+
+HostComponent节点，想要更新，需要根据pendingProps生成新的fiber节点就ok
+
+ClassComponent节点，想要更新，需要实例化它的构造函数，并调用render，遍历dom元素的树，生成fiber树
+
+所以，针对这三种类型的节点，我们需要提供三种不同的更新方式
+
+```js
+function updateHostComponent (current) {
+    const nextProps = current.pendingProps;
+    let nextChildren = nextProps.children;
+
+    if (['string', 'number'].includes(nextProps)) {
+        nextChildren = null
+    }
+    reconcileChildren(current, nextChildren);
+    return current.child
+}
+
+function updateClassComponent(current, ctor) {
+    const instance =  new ctor();
+    const nextChildren = instance.render();
+
+    reconcileChildren(current, nextChildren);
+
+    return current.child
+}
+
+function updateHostRoot(current) {
+    const updateQueue = current.updateQueue;
+    const nextState = updateQueue.firstUpdate.payload;
+    const nextChildren = nextState.element;
+
+    reconcileChildren(current, nextChildren);
+
+    return current.child
 }
 ```
 
-很多情况下，一个父节点会有多个子节点，因此我们需要创建一个方法，创建子节点的时候，同时将兄弟元素联系起来
+可以看到，在这里，我们只是针对不同的fiber节点，按照不同的方式取出它们的子元素，接着统一都调用了**reconcileChildren**这个方法，然后返回这个节点的child
+
+细心的朋友可能会发现，我们刚刚定义的createFiberFromTypeAndProps方法，并没有给节点挂载上return，sibling，child这三个属性，使用这个方法创建的fiber，还是独立的，并未和任何其他的fiber产生关联。
+
+因此，我们除了遍历react元素的树，生成fiber节点之外，还需要做一部分工作，**将它们连接起来**。这就是上面代码中**reconcileChildren**主要做的事情
 
 ```js
+function reconcileChildren(current, nextChildren) {
+    const childArray = Array.isArray(nextChildren) ? nextChildren : [nextChildren]
+    current.child = reconcileChildrenArray(current, childArray)
+}
+
 function reconcileChildrenArray(returnFiber, childArray) {
     let resultingFirstChild = null;
     let previousNewFiber = null;
     let newIdx = 0;
-  
+
     for (; newIdx < childArray.length; newIdx++) {
-        let _newFiber = createChild(returnFiber, childArray[newIdx], expirationTime);
+        let _newFiber = createChild(returnFiber, childArray[newIdx]);
 
         if (resultingFirstChild === null) {
-            /**
-            * 结束时大哥会带着一帮小弟回去，如大哥.sibling = 二哥，二哥.sibling = 三弟
-            * 因此我们将大哥记住，到时候把大哥带回去就可以了
-            */
             resultingFirstChild = _newFiber
         }
         else {
             previousNewFiber.sibling = _newFiber
         }
-        
-        // 每次将之前的一位兄弟留下来等后面的小弟，不然小弟找不到
         previousNewFiber = _newFiber
     }
     return resultingFirstChild
 }
-```
-
-
-
-到这里，大部分工作就做完了，最后我们再将它们整理起来，变成一个可用的功能，实现方法createFiberTree
-
-流程就是，创建Fiber容器，递归调用element，创建fiber树，完事之后，赋值给current树，大家可以自己尝试实现一遍
-
-![](../assets/understand.jpg)
-
-以下是我的版本，仅供参考
-
-
-```js
-function createFiberTree (reactElement, container) {
-    // 1. 创建fiber容器，给dom也挂一个属性，方面后面查找
-    let root = container._reactRootContainer = createFiberRoot(container)
-    
-    updateFiberRoot(element, root)
-    return root
-}
-
-function updateFiberRoot (element, root) {
-    const current = root.current;
-    /**
-     * 遍历React元素树生成fiber树
-     */
-    reconcileChildFibers(current, element)
-}
-
-/**
- * @param returnFiber 父节点的fiber
- * @param newChild 子节点react元素
- * @returns {*}
- */
-function reconcileChildFibers(returnFiber, newChild) {
-    const childArray = Array.isArray(newChild) ? newChild : [newChild];
-    return reconcileChildrenArray(returnFiber, childArray)
-}
-```
-
-有的同学说不对，你这里没有递归，只做了根组件这一层，我想说，是滴，我们还需要改造一下createChild这个方法
-
-```js
 function createChild (returnFiber, newChild) {
     if (typeof newChild === 'object' && newChild !== null) {
         let created = createFiberFromTypeAndProps(newChild);
-      	
-      	// 这里根据newChild的type和props来递归调用reconcileChildFibers方法
-      	// 如果是ClassComponent，则实例化，render得到子元素
-      	// 如果是HostComponent，children就是子元素
-      	// 这里给大家留点发挥的空间吧，看能否实现一下
         created.return = returnFiber;
         return created
     }
@@ -266,12 +252,111 @@ function createChild (returnFiber, newChild) {
 }
 ```
 
+到这里，我们可以对这三种类型的节点，都可以构建其子元素的fiber，要想构建出一整颗树，我们只需从上到下，深度优先地去遍历子节点即可，先来看一下遍历的过程
+
+<div align="center">
+  <img src="../assets/walkTree.gif" />
+  <div>图3-2</div>
+</div>
+
+当React从树上下来时，进行深度优先的遍历，它首先完成child 节点的工作，然后转移到parent身边
+
+> 注意，垂直连接表示sibling，而弯曲的连接表示child，例如b1没有child，而b2有一个childc1.
+
+根据上图，从ReactDOM.render开始，来实现一遍，从头构建出一颗fiber树
+
+```js
+const ReactDOM = {
+    render (reactElement, container) {
+        let root = container._reactRootContainer;
+        if (!root) {
+            root = container._reactRootContainer = createContainer(container)
+        }
+      	// 首次更新容器
+        updateContainer(reactElement, root)
+    }
+};
+
+// react将每个节点的工作拆分成了一个工作单元，最开始我们创建一个空的工作单元
+let nextUnitOfWork = null;
+
+// 拿到element，我们先将它挂到curret树到更新队列里，然后循环遍历节点
+function updateContainer (element, container) {
+    const current = container.current;
+
+    const update = new Updater();
+    update.payload = {element};
+
+    const queue = current.updateQueue = new UpdateQueue();
+    queue.firstUpdate = queue.lastUpdate = update;
+
+    nextUnitOfWork = current;
+
+  	// 开始遍历更新
+    workLoop();
+
+    // 现在我们可以打印一下container看看生成的fiber树
+    console.log(container)
+}
+
+function workLoop () {
+    while (nextUnitOfWork !== null) {
+        nextUnitOfWork = performUnitOfWork(nextUnitOfWork)
+    }
+}
+
+function performUnitOfWork (current) {
+    let next = beginWork(current);
+    if (next === null) {
+        next = completeUnitOfWork(current)
+    }
+  	
+  	// 依次打印出next
+    if (next && typeof next.type === "function") {
+        console.log('next', (next.type + '').match(/function ([^(]+)\(/)[1]);
+    }
+    else {
+        console.log('next', next ? next.type + '#' + next.pendingProps.id : next);
+    }
+    return next
+}
+
+function beginWork (current) {
+    const Component = current.type;
+    switch (current.tag) {
+        case ClassComponent: {
+            return updateClassComponent(current, Component)
+        }
+        case HostRoot: {
+            return updateHostRoot(current)
+        }
+        case HostComponent: {
+            return updateHostComponent(current)
+        }
+        default:
+            throw new Error('unknown unit of work tag')
+    }
+}
+```
+
+我们在performUnitOfWork函数中打印next，看下节点的生成顺序，和图3-2一致
+
+```js
+next ClickCounter
+next button#b1
+next div#b2
+next span#c1
+next b#d1
+next span#c2
+next div#b3
+next span#c3
+next null
+```
 
 
-到这里，有同学就会说了，大哥，你bb了这么多，我什么时候能看到一个真正的dom啊
 
-![](../assets/wandan.jpeg)
+到这里，大部分工作就做完了，我们在workLoop后打印一下container，就可以看到新鲜出炉的fiber树了，
 
-欲知后事如何，请看[下一节](../真实DOM的生成/readme.md)
+但是接下来就又有了一个问题，如何根据这颗fiber树，去生成dom树呢，欲知后事如何，请看[下一节](../真实DOM的生成/readme.md)
 
  [上一节: React组件](../React元素/readme.md) | [下一节：真实DOM的生成](../真实DOM的生成/readme.md) 

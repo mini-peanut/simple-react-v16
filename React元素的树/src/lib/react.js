@@ -2,18 +2,11 @@ function Component(props) {
     this.props = props
 }
 Component.prototype.setState = function (partialState) {
-    if (typeof partialState === "function") {
-        partialState = partialState(this.state)
-    }
-    this.state = {
-        ...this.state,
-        ...partialState
-    };
-    this.parent.innerHTML = '';
-    let children = this.render();
-    children = Array.isArray(children) ? children : [children];
-    children.map(item => this.parent.appendChild(renderChildren(item)))
+    this.updater.enqueueSetState(this, partialState)
 };
+
+Component.prototype.isReactComponent = true;
+
 const createElement = function(type, config, ...children) {
     let props = {};
 
