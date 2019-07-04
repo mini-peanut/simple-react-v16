@@ -1,5 +1,5 @@
 <h1 align="center"> 构建React元素的树</h1>
-先来回顾一下 [上一节](../React组件/readme.md) 最后提到的一个问题
+先来回顾一下 [上一节: React组件](../React组件/readme.md) 最后提到的一个问题
 
 > 如果组件有一个状态改变了，是否要将整个应用重新渲染一遍？能否精准找到需要修改的dom，然后再进行性能消耗最小的更新呢？
 
@@ -358,4 +358,4 @@ next null
 
 但是接下来就又有了一个问题，如何根据这颗fiber树，去生成dom树呢，欲知后事如何，请看[下一节](../真实DOM的生成/readme.md)
 
- [上一节: React组件](../React元素/readme.md) | [下一节：真实DOM的生成](../真实DOM的生成/readme.md) 
+ [上一节: React组件](../React组件/readme.md) | [下一节：真实DOM的生成](../真实DOM的生成/readme.md) 
