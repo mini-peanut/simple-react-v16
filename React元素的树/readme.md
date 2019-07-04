@@ -1,5 +1,5 @@
 <h1 align="center"> 构建React元素的树</h1>
-先来回顾一下[上一节](../React组件/readme.md)最后提到的一个问题
+先来回顾一下 [上一节](../React组件/readme.md) 最后提到的一个问题
 
 > 如果组件有一个状态改变了，是否要将整个应用重新渲染一遍？能否精准找到需要修改的dom，然后再进行性能消耗最小的更新呢？
 
@@ -253,9 +253,8 @@ function createChild (returnFiber, newChild) {
 ```
 
 到这里，我们可以对这三种类型的节点，都可以构建其子元素的fiber，要想构建出一整颗树，我们只需从上到下，深度优先地去遍历子节点即可，先来看一下遍历的过程
-
+![](../assets/walkTree.gif)
 <div align="center">
-  <img src="../assets/walkTree.gif" />
   <div>图3-2</div>
 </div>
 
