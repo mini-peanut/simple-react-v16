@@ -253,6 +253,7 @@ function createChild (returnFiber, newChild) {
 ```
 
 到这里，我们可以对这三种类型的节点，都可以构建其子元素的fiber，要想构建出一整颗树，我们只需从上到下，深度优先地去遍历子节点即可，先来看一下遍历的过程
+
 ![](../assets/walkTree.gif)
 <div align="center">
   <div>图3-2</div>
