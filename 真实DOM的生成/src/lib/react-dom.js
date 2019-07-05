@@ -1,4 +1,3 @@
-import { updateContainer, createContainer } from 'reconciler'
 
 const ReactDOM = {
     render (reactElement, container) {

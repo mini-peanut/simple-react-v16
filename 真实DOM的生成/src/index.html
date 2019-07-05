@@ -8,14 +8,18 @@
     <title>Document</title>
 </head>
 <body>
-<script src="../assets/react.development.js"></script>
-<!--<script src="./react.js"></script>-->
-<script src="../assets/react-dom.development.js"></script>
+<!--<script src="../../assets/react.development.js"></script>-->
+<script src="../../assets/lodash.min.js"></script>
+<script src="./lib/react.js"></script>
+<!--<script src="../../assets/react-dom.development.js"></script>-->
 <!--<script src="../React协调工作/updateClassComponent.js"></script>-->
 <!--<script src="./reconciler.js"></script>-->
-<!--<script src="./react-dom.js"></script>-->
-<script src="../assets/lodash.min.js"></script>
-<script src="https://unpkg.com/babel-standalone@6/babel.js"></script>
+<script src="./fiber/fiberNode.js"></script>
+<script src="./fiber/fiberRootNode.js"></script>
+<script src="./lib/createFiberFromTypeAndProps.js"></script>
+<script src="./lib/reconciler.js"></script>
+<script src="./lib/react-dom.js"></script>
+<script src="../../assets/babel.js"></script>
 <div id="app"></div>
 <script>
 
@@ -53,8 +57,7 @@
         }
     }
 
-    ReactDOM.render(<ClickCounter />, document.getElementById('app'));
-    // console.log(ReactDOM.createFiberTree(<ClickCounter />, document.getElementById('app')))
+    ReactDOM.render(<ClickCounter />, document.getElementById('app'))
 </script>
 </body>
 </html>

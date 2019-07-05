@@ -116,7 +116,7 @@ function updateHostRoot(current) {
 }
 
 function reconcileChildren(current, nextChildren) {
-    const childArray = Array.isArray(nextChildren) ? nextChildren : [nextChildren]
+    const childArray = Array.isArray(nextChildren) ? nextChildren : [nextChildren];
     current.child = reconcileChildrenArray(current, childArray)
 }
 

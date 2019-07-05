@@ -4,6 +4,9 @@ function Component(props) {
 Component.prototype.setState = function (partialState) {
     this.updater.enqueueSetState(this, partialState)
 };
+
+Component.prototype.isReactComponent = true;
+
 const createElement = function(type, config, ...children) {
     let props = {};
 

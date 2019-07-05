@@ -336,6 +336,20 @@ function beginWork (current) {
             throw new Error('unknown unit of work tag')
     }
 }
+function completeUnitOfWork(current) {
+    while (true) {
+        const returnFiber = current.return;
+        const siblingFiber = current.sibling;
+
+        if (siblingFiber !== null) {
+            return siblingFiber
+        } else if (returnFiber !== null) {
+            current = returnFiber
+        } else {
+            return null
+        }
+    }
+}
 ```
 
 我们在performUnitOfWork函数中打印next，看下节点的生成顺序，和图3-2一致
