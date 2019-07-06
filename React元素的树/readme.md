@@ -372,6 +372,6 @@ next null
 
 到这里，大部分工作就做完了，我们在workLoop后打印一下container，就可以看到新鲜出炉的fiber树了，
 
-但是接下来就又有了一个问题，如何根据这颗fiber树，去生成dom树呢，欲知后事如何，请看[下一节](../真实DOM的生成/readme.md)
+但是接下来就又有了一个问题，如何根据这颗fiber树，去生成dom树呢，欲知后事如何，请看[下一节](../真实DOM的生成/真实DOM的生成.md)
 
- [上一节: React组件](../React组件/readme.md) | [下一节：真实DOM的生成](../真实DOM的生成/readme.md) 
+ [上一节: React组件](../React组件/React组件.md) | [下一节：真实DOM的生成](../真实DOM的生成/真实DOM的生成.md) 

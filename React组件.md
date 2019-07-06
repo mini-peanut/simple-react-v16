@@ -1,6 +1,5 @@
 <h1 align="center"> React组件 </h1>
-
-通过[上一节](../React元素/readme.md)我们简单了解了元素以及它的创建过程。而元素构成组件，我们这一节主要探讨React组件以及如何将react组件的内容渲染到页面上
+通过[上一节](./React元素.md)我们简单了解了元素以及它的创建过程。而元素构成组件，我们这一节主要探讨React组件以及如何将React组件的内容渲染到页面上
 
 ## 什么是React组件
 
@@ -41,10 +40,14 @@ class ClickCounter extends Component{
     }
 }
 
-ReactDOM.render(<ClickCounter />, document.getElementById('app'))
+ReactDOM.render(<ClickCounter />, document.getElementById('root'))
 ```
 
-打开[index.html]('.index/html')将开发区的内容注释掉，将react和react-dom的注释打开，将上面这段代码放入测试区，查看结果，可以看到
+先来看一下实际的[效果](https://stackblitz.com/edit/react-ykafkp?embed=1&file=index.js)
+
+![image-20190706123739753](/Users/huax/workspace/simple-react-v16/assets/react组件-1.png)
+
+可以看到
 
 1. render中的内容被渲染到了页面上，控制台依次输出constructor,  componentDidMount
 3. 点击按钮后页面count加1，控制台依次输出addCount, componentDidUpdate
@@ -55,7 +58,7 @@ ReactDOM.render(<ClickCounter />, document.getElementById('app'))
 
 ### 将内容渲染到页面上
 
-先来看第一点，这个很简单，实例化ClickCounter，调用render获取子节点元素，递归创建dom，插入到div#app上，就可以了，这一段大家可以先行自己实现一遍
+先来看第一点，如果**只是**为了实现这个功能的话，就很简单，实例化ClickCounter，调用render获取子节点元素，递归创建dom，插入到div#app上，就可以了，这一段大家可以先行自己实现一遍
 
 以下是我的版本
 
@@ -129,9 +132,14 @@ Component.prototype.setState = function (partialState) {
 React.Componet = Component
 ```
 
-很好，but，如果组件有一个状态改变了，是否要将整个应用重新渲染一遍？能否精准找到需要修改的dom，然后再进行性能消耗最小的更新呢？
+看下[效果](https://stackblitz.com/edit/react-xmnjbu?embed=1&file=index.js)，我们替换了React和React-dom的引用，可以看到也实现了上述的两个功能
 
-![](../assets/陷入沉思.jpg)
+![image-20190706140613603](./assets/react组件-2.png)
 
-预知后事如何，请看下一节
-[代码](index.html) | [上一节: React元素](../React元素/readme.md) | [下一节：React元素的树](../React元素的树/readme.md) 
+
+
+当然，要是说React就这么简单，那也太侮辱智商了，下一节，我将会给大家带来React另外一个概念，React元素的树，React能够非常快速地更新，并且为了实现高性能，不可能每次更新dom就从头再来渲染一次，它采用了一些有趣的技术，而这些，都是基于react元素的树而来的
+
+
+[代码](index.html) | [上一节: React元素](./React元素.md) | [下一节：React元素的树](./React元素的树.md) 
+

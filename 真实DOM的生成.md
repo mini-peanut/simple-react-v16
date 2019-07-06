@@ -1,4 +1,6 @@
 <h1 align="center">真实DOM的生成</h1>
+本文代码[地址](https://stackblitz.com/edit/react-vh3bhz?embed=1&file=index.js), 可对照着代码阅读
+
 通过上一节，我们了解了创建一颗Fiber树的过程，但是却不知道这颗fiber树是如何生成真实dom且应用到页面上的
 
 之前提到过，HostComponent类型的fiber节点，stateNode属性上挂载着这个fiber对应的真实DOM节点，实际上，在生成fiber树的时候，会一并生成真实DOM节点，然后再挂载上去，这一节主要来完善一下这个功能
