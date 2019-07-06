@@ -41,7 +41,9 @@ function updateContainer (element, container) {
     workLoop();
 
     // 现在我们可以打印一下container看看生成的fiber树
-    console.log(container)
+    console.log(container);
+
+    completeRoot(current.child)
 }
 
 function workLoop () {
@@ -100,6 +102,8 @@ function updateHostComponent (current) {
 
 function updateClassComponent(current, ctor) {
     const instance =  new ctor();
+    current.stateNode = instance;
+
     const nextChildren = instance.render();
 
     reconcileChildren(current, nextChildren);
@@ -165,19 +169,39 @@ function completeUnitOfWork(current) {
 
 function completeWork (current) {
     const newProps = current.pendingProps;
-    const type = current.type;
 
-    // 生成实例
-    const _instance = document.createElement(type);
+    switch(current.tag) {
+        case ClassComponent: {
+            break
+        }
+        case HostRoot: {
+            break
+        }
+        case HostComponent: {
+            const type = current.type;
 
-    // 插入子元素
-    appendAllChildren(_instance, current);
+            // 生成dom实例
+            const _instance = document.createElement(type);
 
-    // 挂载上属性props
-    finalizeInitialChildren(_instance, newProps);
+            // 给dom也挂上fiber节点，用于后续给dom绑定事件，事件触发时
+            // 我们可以通过event.target获取到真实dom，之后可以通过这个属性获取到相应的fiber
+            _instance.internalInstanceKey = current;
+            _instance.internalEventHandlersKey = newProps;
 
-    // 将dom挂载在current.stateNode上
-    current.stateNode = _instance;
+            // 插入子元素
+            appendAllChildren(_instance, current);
+
+            // 挂载上属性props
+            finalizeInitialChildren(_instance, newProps);
+
+            // 将dom挂载在current.stateNode上
+            current.stateNode = _instance;
+            break
+        }
+        default: {
+            throw new Error('Unknown unit of work tag')
+        }
+    }
 
     return null
 }
@@ -224,102 +248,11 @@ function finalizeInitialChildren (domElement, props) {
             })
         } else if (propKey === 'className') {
             domElement.setAttribute('class', propValue)
-        } else if (registrationNames.includes(propKey) || propKey === 'onChange') {
-            let eventType = propKey.slice(2).toLocaleLowerCase();
-            if (eventType.endsWith('capture')) {
-                eventType = eventType.slice(0, -7)
-            }
-            document.addEventListener(eventType, dispatchEventWithBatch)
         } else {
             const propValue = props[propKey];
             domElement.setAttribute(propKey, propValue)
         }
     })
-}
-
-/**
- * 绑定事件
- * @param nativeEvent
- * @returns {boolean}
- */
-function dispatchEventWithBatch (nativeEvent) {
-    const type = nativeEvent.type;
-    let previousIsBatchingInteractiveUpdates = isBatchingInteractiveUpdates;
-    let previousIsBatchingUpdates = isBatchingUpdates;
-    let previousIsDispatchControlledEvent = isDispatchControlledEvent;
-    if (type === 'change') {
-        isDispatchControlledEvent = true
-    }
-
-    isBatchingUpdates = true;
-
-    try {
-        return dispatchEvent(nativeEvent)
-    } finally {
-        isBatchingInteractiveUpdates = previousIsBatchingInteractiveUpdates;
-        isBatchingUpdates = previousIsBatchingUpdates;
-        if (!isBatchingUpdates && !isRendering) {
-            if (isDispatchControlledEvent) {
-                isDispatchControlledEvent = previousIsDispatchControlledEvent;
-                if (scheduledRoot) {
-                    performSyncWork()
-                }
-            } else {
-                if (scheduledRoot) {
-                    scheduleCallbackWithExpirationTime(scheduledRoot, scheduledRoot.expirationTime)
-                }
-            }
-        }
-    }
-}
-
-function getParent(inst) {
-    do {
-        inst = inst.return;
-    } while (inst && inst.tag !== HostComponent);
-
-    if (inst) {
-        return inst;
-    }
-    return null;
-}
-
-
-function dispatchEvent (nativeEvent) {
-    let listeners = [];
-    const nativeEventTarget = nativeEvent.target || nativeEvent.srcElement;
-    const targetInst = nativeEventTarget.internalInstanceKey;
-    traverseTwoPhase(targetInst, accumulateDirectionalDispatches.bind(null, listeners), nativeEvent);
-    listeners.forEach(listener => listener(nativeEvent))
-}
-
-function traverseTwoPhase(inst, fn, arg) {
-    const path = [];
-    while (inst) {
-        path.push(inst);
-        inst = getParent(inst);
-    }
-    let i;
-    for (i = path.length; i-- > 0; ) {
-        fn(path[i], 'captured', arg);
-    }
-    for (i = 0; i < path.length; i++) {
-        fn(path[i], 'bubbled', arg);
-    }
-}
-
-function accumulateDirectionalDispatches (acc, inst, phase, nativeEvent) {
-    let type = nativeEvent.type;
-    let registrationName = 'on' + type[0].toLocaleUpperCase() + type.slice(1);
-    if (phase === 'captured') {
-        registrationName = registrationName + 'Capture'
-    }
-    const stateNode = inst.stateNode;
-    const props = stateNode.internalEventHandlersKey;
-    const listener = props[registrationName];
-    if (listener) {
-        acc.push(listener)
-    }
 }
 
 function createChild (returnFiber, newChild) {
@@ -330,4 +263,45 @@ function createChild (returnFiber, newChild) {
         return created
     }
     return null
+}
+
+function completeRoot(finishedWork) {
+    const parentFiber = getHostParentFiber(finishedWork);
+    console.log(parentFiber)
+    const parent = parentFiber.stateNode.containerInfo;
+    let node = finishedWork;
+    while (true) {
+        if (node.tag === HostComponent) {
+            parent.appendChild(node.stateNode)
+        } else if (node.child !== null) {
+            node.child.return = node;
+            node = node.child;
+            continue
+        }
+        if (node === finishedWork) {
+            return
+        }
+        while (node.sibling === null) {
+            if (node.return === null || node.return === finishedWork) {
+                return
+            }
+            node = node.return
+        }
+        node.sibling.return = node.return;
+        node = node.sibling
+    }
+}
+
+function getHostParentFiber(fiber) {
+    let parent = fiber.return;
+    while (parent !== null) {
+        if (isHostParent(parent)) {
+            return parent
+        }
+        parent = parent.return
+    }
+}
+
+function isHostParent(fiber) {
+    return fiber.tag === HostComponent || fiber.tag === HostRoot
 }

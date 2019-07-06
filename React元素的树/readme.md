@@ -25,9 +25,9 @@ function FiberNode (tag, pendingProps) {
     this.type = null;
 
     /**
-     * 原生节点的stateNode是其真实dom
-     * 根节点的stateNode是FiberRoot的实例，FiberRoot我们等一会讲
-     * class组件的stateNode是组件类的实例
+     * HostComponent：原生节点的stateNode是其真实dom
+     * HostRoot：根fiber节点的stateNode是FiberRoot的实例
+     * ClassComponent：class组件的stateNode是组件类的实例
      */
     this.stateNode = null;
 
@@ -194,6 +194,8 @@ function updateHostComponent (current) {
 
 function updateClassComponent(current, ctor) {
     const instance =  new ctor();
+    // ClassComponent的stateNode是它的实例
+  	current.stateNode = instance
     const nextChildren = instance.render();
 
     reconcileChildren(current, nextChildren);
