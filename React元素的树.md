@@ -357,11 +357,11 @@ function completeUnitOfWork(current) {
 
 我们在performUnitOfWork函数中打印next，看下节点的生成顺序，和图3-2一致
 
-![image-20190706144057537](/Users/huax/workspace/simple-react-v16/assets/React元素的树-1.png)
+![image-20190706144057537](./assets/React元素的树-1.png)
 
 到这里，大部分工作就做完了，我们在workLoop后打印一下container，就可以看到新鲜出炉的fiber树了
 
-![image-20190706144210493](/Users/huax/workspace/simple-react-v16/assets/React元素的树-2.png)
+![image-20190706144210493](./assets/React元素的树-2.png)
 
 
 
