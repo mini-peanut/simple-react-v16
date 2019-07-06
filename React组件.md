@@ -1,4 +1,5 @@
 <h1 align="center"> React组件 </h1>
+
 通过[上一节](./React元素.md)我们简单了解了元素以及它的创建过程。而元素构成组件，我们这一节主要探讨React组件以及如何将React组件的内容渲染到页面上
 
 ## 什么是React组件
@@ -45,7 +46,7 @@ ReactDOM.render(<ClickCounter />, document.getElementById('root'))
 
 先来看一下实际的[效果](https://stackblitz.com/edit/react-ykafkp?embed=1&file=index.js)
 
-![image-20190706123739753](/Users/huax/workspace/simple-react-v16/assets/react组件-1.png)
+![image-20190706123739753](./assets/react组件-1.png)
 
 可以看到
 
