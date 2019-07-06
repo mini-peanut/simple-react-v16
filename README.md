@@ -34,8 +34,9 @@
 2. [React组件](React组件.md)
 3. [React元素的树](/React元素的树.md)
 4. [真实DOM的生成](/真实DOM的生成.md)
-5. [React副作用](/readme.md)
-6. [将渲染工作分解](将渲染工作分解.md)
+5. [React事件绑定](/React事件绑定.md)
+6. [将渲染工作分解](/将渲染工作分解.md)
+7. [React副作用](/React副作用.md)
 
 ## 📚资料
 - [A Cartoon Intro to Fiber](https://www.youtube.com/watch?v=ZCuYPiUIONs&list=PLb0IAmt7-GS3fZ46IGFirdqKTIxlws7e0&index=5)

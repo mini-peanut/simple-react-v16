@@ -1,5 +1,5 @@
 <h1 align="center">真实DOM的生成</h1>
-本文代码[地址](https://stackblitz.com/edit/react-vh3bhz?embed=1&file=index.js), 可对照着代码阅读
+本节代码[地址](https://stackblitz.com/edit/react-vh3bhz?embed=1&file=index.js)
 
 通过上一节，我们了解了创建一颗Fiber树的过程，但是却不知道这颗fiber树是如何生成真实dom且应用到页面上的
 
@@ -220,7 +220,7 @@ function isHostParent(fiber) {
 
 最后再在浏览器中打开index.html文件，可以看出dom已经被渲染出来了
 
-![image-20190706110410367](../assets/real-dom-render.png)
+![image-20190706144525023](/Users/huax/workspace/simple-react-v16/assets/真实DOM的生成-1.png)
 
 这一节，我们了解了react是如何将reactElement转变为真实dom的过程，下一节，我们将来讨论react是如何完成事件绑定的
 

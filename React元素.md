@@ -25,11 +25,9 @@
 
 原来，果真是一个对象，但这个对象是babel直接生成的么，我们打开[babel的官网](https://babeljs.io/repl/#?babili=false&browsers=&build=&builtIns=false&spec=false&loose=false&code_lz=GYVwdgxgLglg9mABACwKYBt1wBQEpEDeAUIogE6pQhlIA8AJjAG6IToCGAzpwHLsC2qALwByNJjgiAfAAkMWRAHc4ZdPQCEtAPSMmUgNxEAvkSA&debug=false&forceAllTransforms=false&shippedProposals=false&circleciRepo=&evaluate=false&fileSize=false&timeTravel=false&sourceType=module&lineWrap=true&presets=react&prettier=false&targets=&version=7.4.5&externalPlugins=)来转一下试试
 
-```js
-const hello = React.createElement("div", { className: "hello" }, "Hello world!");
-```
+![image-20190706143042600](/Users/huax/Library/Application Support/typora-user-images/image-20190706143042600.png)
 
-原来，中间还经过了react接手了一下，babel将type，key，props等等其他属性作为参数，调用**React.createElement**来创建了这个对象
+原来，babel生成的是```React.createElement(…props)``, 之后是调用**React.createElement**创建了这个对象
 
 我们这一节，就是简单来实现一下React.createElement，我们目前只使用type和props属性
 
