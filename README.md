@@ -17,16 +17,16 @@
 
 **可能与源码差异较大:** 为了方便理解，有时候会来一些简单粗暴的实现，在之后会纠正过来
 
-## 🚣技巧
-[边做边学](https://en.wikipedia.org/wiki/Learning-by-doing_(economics))
-> 边做边学是经济学理论中的一个概念，生产力是通过实践、自我完善和小创新来实现的。肯尼斯•阿罗在他的内生增长理论设计中使用了“边做边学”的概念来解释创新和技术变革的影响。
+## 🚣todo-list
+- [x] element
+- [x] component
+- [x] fiber 树
+- [ ] 更新机制 - 协调算法
+- [ ] 事件机制
+- [ ] hooks
+- [ ] suspense
+- [ ] 代码小技巧
 
-项目中的每个文件夹都有可以跑起来的index.html文件，读者可以先注释掉，自己实现一遍，来加深印象
-
-[费曼学习法](https://wiki.mbalib.com/wiki/%E8%B4%B9%E6%9B%BC%E5%AD%A6%E4%B9%A0%E6%B3%95)
-> 费曼学习法的灵感源于诺贝尔物理奖获得者理查德•费曼（Richard Feynman），运用费曼技巧,你只需花上20分钟就能深入理解知识点,而且记忆深刻,难以遗忘。
-
-拿出笔记本，当能够通过简单的话语从头到尾写出一个从未了解过源码的人可以理解的想法的时候，就代表已经很深入地理解了这个概念
 
 ## 📜目录
 
@@ -34,9 +34,9 @@
 2. [React组件](React组件.md)
 3. [React元素的树](/React元素的树.md)
 4. [真实DOM的生成](/真实DOM的生成.md)
-5. [React事件绑定](/React事件绑定.md)
-6. [将渲染工作分解](/将渲染工作分解.md)
-7. [React副作用](/React副作用.md)
+5. [将渲染工作分解](/将渲染工作分解.md)
+6. [React副作用](/React副作用.md)
+7. [React事件绑定](/React事件绑定.md)
 
 ## 📚资料
 - [A Cartoon Intro to Fiber](https://www.youtube.com/watch?v=ZCuYPiUIONs&list=PLb0IAmt7-GS3fZ46IGFirdqKTIxlws7e0&index=5)
