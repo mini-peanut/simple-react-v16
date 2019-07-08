@@ -21,6 +21,7 @@
 - [x] element
 - [x] component
 - [x] fiber 树
+- [x] dom渲染
 - [ ] 更新机制 - 协调算法
 - [ ] 事件机制
 - [ ] hooks
