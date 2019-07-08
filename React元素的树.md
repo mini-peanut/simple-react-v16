@@ -1,6 +1,6 @@
 <h1 align="center"> 构建React元素的树</h1>
 
-这一节代码较多，可以通过[代码](https://stackblitz.com/edit/react-ma8jnp?embed=1&file=index.js)，对照着看，我们先来想一个问题
+这一节代码较多，可以通过[这里](https://stackblitz.com/edit/react-ma8jnp?embed=1&file=index.js)，对照着看，我们先来想一个问题
 
 > 如果组件有一个状态改变了，如何精准找到需要修改的dom，然后再进行性能消耗最小的更新呢？
 
