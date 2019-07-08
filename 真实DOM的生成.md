@@ -1,6 +1,6 @@
 <h1 align="center">真实DOM的生成</h1>
 
-本节代码[地址](https://stackblitz.com/edit/react-vh3bhz?embed=1&file=index.js)
+本节代码[地址](https://stackblitz.com/edit/react-zewnpq?embed=1&file=src/lib/reconciler.js)
 
 通过上一节，我们了解了创建一颗Fiber树的过程，但是却不知道这颗fiber树是如何生成真实dom且应用到页面上的
 
