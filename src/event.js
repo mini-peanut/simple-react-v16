@@ -1,217 +1,159 @@
-const EVENT_POOL_SIZE = 10;
+import SyntheticEvent from './SyntheticEvent'
 
-/**
- * @interface Event
- * @see http://www.w3.org/TR/DOM-Level-3-Events/
- */
-const EventInterface = {
-    type: null,
-    target: null,
-    // currentTarget is set when dispatching; no use in copying it here
-    currentTarget: function() {
-        return null;
-    },
-    eventPhase: null,
-    bubbles: null,
-    cancelable: null,
-    timeStamp: function(event) {
-        return event.timeStamp || Date.now();
-    },
-    defaultPrevented: null,
-    isTrusted: null,
-};
+const TOP_CLICK = 'click';
 
-function functionThatReturnsTrue() {
-    return true;
+const interactiveEventTypeNames = [[TOP_CLICK, 'click']];
+const eventTypes = {};
+const topLevelEventsToDispatchConfig = {};
+
+const _assign = Object.assign;
+
+function addEventTypeNameToConfig(_ref, isInteractive) {
+    const topEvent = _ref[0], event = _ref[1];
+
+    const capitalizedEvent = event[0].toUpperCase() + event.slice(1);
+    const onEvent = 'on' + capitalizedEvent;
+
+    const type = {
+        phasedRegistrationNames: {
+            bubbled: onEvent,
+            captured: onEvent + 'Capture'
+        },
+        dependencies: [topEvent],
+        isInteractive: isInteractive
+    };
+    eventTypes[event] = type;
+    topLevelEventsToDispatchConfig[topEvent] = type;
 }
 
-function functionThatReturnsFalse() {
-    return false;
-}
-
-/**
- * 合成事件由事件插件分派，通常是响应一个顶级事件委托处理程序。 这些系统通常应该使用池来减少垃圾的频率收集。
- * 系统应检查“是否持久”，以确定事件被分派后应释放到池中。用户需要一个持久化事件应该调用“persist”。
- * 合成事件(和子类)实现DOM Level 3 events API by规范浏览器怪癖。子类不一定要实现DOM接口;
- * 自定义特定于应用程序的事件也可以子类化它。
- *
- * @param {object} dispatchConfig Configuration used to dispatch this event.
- * @param {*} targetInst Marker identifying the event target.
- * @param {object} nativeEvent Native browser event.
- * @param {DOMEventTarget} nativeEventTarget Target node.
- */
-function SyntheticEvent(
-    dispatchConfig,
-    targetInst,
-    nativeEvent,
-    nativeEventTarget,
-) {
-    this.dispatchConfig = dispatchConfig;
-    this._targetInst = targetInst;
-    this.nativeEvent = nativeEvent;
-
-    const Interface = this.constructor.Interface;
-    for (const propName in Interface) {
-        if (!Interface.hasOwnProperty(propName)) {
-            continue;
-        }
-        const normalize = Interface[propName];
-        if (normalize) {
-            this[propName] = normalize(nativeEvent);
-        } else {
-            if (propName === 'target') {
-                this.target = nativeEventTarget;
-            } else {
-                this[propName] = nativeEvent[propName];
-            }
-        }
-    }
-
-    const defaultPrevented =
-        nativeEvent.defaultPrevented != null
-            ? nativeEvent.defaultPrevented
-            : nativeEvent.returnValue === false;
-    if (defaultPrevented) {
-        this.isDefaultPrevented = functionThatReturnsTrue;
-    } else {
-        this.isDefaultPrevented = functionThatReturnsFalse;
-    }
-    this.isPropagationStopped = functionThatReturnsFalse;
-    return this;
-}
-
-Object.assign(SyntheticEvent.prototype, {
-    preventDefault: function() {
-        this.defaultPrevented = true;
-        const event = this.nativeEvent;
-        if (!event) {
-            return;
-        }
-
-        if (event.preventDefault) {
-            event.preventDefault();
-        } else if (typeof event.returnValue !== 'unknown') {
-            event.returnValue = false;
-        }
-        this.isDefaultPrevented = functionThatReturnsTrue;
-    },
-
-    stopPropagation: function() {
-        const event = this.nativeEvent;
-        if (!event) {
-            return;
-        }
-
-        if (event.stopPropagation) {
-            event.stopPropagation();
-        } else if (typeof event.cancelBubble !== 'unknown') {
-            // The ChangeEventPlugin registers a "propertychange" event for
-            // IE. This event does not support bubbling or cancelling, and
-            // any references to cancelBubble throw "Member not found".  A
-            // typeof check of "unknown" circumvents this issue (and is also
-            // IE specific).
-            event.cancelBubble = true;
-        }
-
-        this.isPropagationStopped = functionThatReturnsTrue;
-    },
-
-    /**
-     * We release all dispatched `SyntheticEvent`s after each event loop, adding
-     * them back into the pool. This allows a way to hold onto a reference that
-     * won't be added back into the pool.
-     */
-    persist: function() {
-        this.isPersistent = functionThatReturnsTrue;
-    },
-
-    /**
-     * Checks if this event should be released back into the pool.
-     *
-     * @return {boolean} True if this should not be released, false otherwise.
-     */
-    isPersistent: functionThatReturnsFalse,
-
-    /**
-     * `PooledClass` looks for `destructor` on each instance it releases.
-     */
-    destructor: function() {
-        const Interface = this.constructor.Interface;
-        for (const propName in Interface) {
-                this[propName] = null;
-        }
-        this.dispatchConfig = null;
-        this._targetInst = null;
-        this.nativeEvent = null;
-        this.isDefaultPrevented = functionThatReturnsFalse;
-        this.isPropagationStopped = functionThatReturnsFalse;
-        this._dispatchListeners = null;
-        this._dispatchInstances = null;
-    },
+interactiveEventTypeNames.forEach(function (eventTuple) {
+    addEventTypeNameToConfig(eventTuple, true);
 });
 
-SyntheticEvent.Interface = EventInterface;
+const SimpleEventPlugin = {
+    eventTypes: eventTypes,
 
-/**
- * Helper to reduce boilerplate when creating subclasses.
- */
-SyntheticEvent.extend = function(Interface) {
-    const Super = this;
+    isInteractiveTopLevelEventType: function (topLevelType) {
+        const config = topLevelEventsToDispatchConfig[topLevelType];
+        return config !== undefined && config.isInteractive === true;
+    },
 
-    const E = function() {};
-    E.prototype = Super.prototype;
-    const prototype = new E();
-
-    function Class() {
-        return Super.apply(this, arguments);
+    extractEvents: function (topLevelType, targetInst, nativeEvent, nativeEventTarget) {
+        const dispatchConfig = topLevelEventsToDispatchConfig[topLevelType];
+        if (!dispatchConfig) {
+            return null;
+        }
+        if (topLevelType && nativeEvent.button === 2) {
+            return null;
+        }
+        const event = SyntheticMouseEvent.getPooled(dispatchConfig, targetInst, nativeEvent, nativeEventTarget);
+        accumulateTwoPhaseDispatches(event);
+        return event;
     }
-    Object.assign(prototype, Class.prototype);
-    Class.prototype = prototype;
-    Class.prototype.constructor = Class;
-
-    Class.Interface = Object.assign({}, Super.Interface, Interface);
-    Class.extend = Super.extend;
-    addEventPoolingTo(Class);
-
-    return Class;
 };
+
+const SyntheticMouseEvent = SyntheticEvent.extend({});
+
+const injection = {
+    /**
+     * @param {array} InjectedEventPluginOrder
+     * @public
+     */
+    injectEventPluginOrder: injectEventPluginOrder,
+
+    /**
+     * @param {object} injectedNamesToPlugins Map from names to plugin modules.
+     */
+    injectEventPluginsByName: injectEventPluginsByName
+};
+
+function injectEventPluginsByName(injectedNamesToPlugins) {
+    let isOrderingDirty = false;
+    for (let pluginName in injectedNamesToPlugins) {
+        if (!injectedNamesToPlugins.hasOwnProperty(pluginName)) {
+            continue;
+        }
+        let pluginModule = injectedNamesToPlugins[pluginName];
+        if (!namesToPlugins.hasOwnProperty(pluginName) || namesToPlugins[pluginName] !== pluginModule) {
+            (function () {
+                if (!!namesToPlugins[pluginName]) {
+                    {
+                        throw ReactError('EventPluginRegistry: Cannot inject two different event plugins using the same name, `' + pluginName + '`.');
+                    }
+                }
+            })();
+            namesToPlugins[pluginName] = pluginModule;
+            isOrderingDirty = true;
+        }
+    }
+    if (isOrderingDirty) {
+        recomputePluginOrdering();
+    }
+}
+
+
+injection.injectEventPluginsByName({
+    SimpleEventPlugin: SimpleEventPlugin
+});
+
+const PossiblyWeakMap = typeof WeakMap === 'function' ? WeakMap : Map;
+const elementListeningSets = new PossiblyWeakMap();
+
+function getListeningSetForElement(element) {
+    let listeningSet = elementListeningSets.get(element);
+    if (listeningSet === undefined) {
+        listeningSet = new Set();
+        elementListeningSets.set(element, listeningSet);
+    }
+    return listeningSet;
+}
 
 addEventPoolingTo(SyntheticEvent);
 
 
-function getPooledEvent(dispatchConfig, targetInst, nativeEvent, nativeInst) {
-    const EventConstructor = this;
-    if (EventConstructor.eventPool.length) {
-        const instance = EventConstructor.eventPool.pop();
-        EventConstructor.call(
-            instance,
-            dispatchConfig,
-            targetInst,
-            nativeEvent,
-            nativeInst,
-        );
-        return instance;
+
+export function ensureListeningTo (mountAt, registrationName) {
+    var listeningSet = getListeningSetForElement(mountAt);
+    var dependencies = registrationNameDependencies[registrationName];
+
+    for (var i = 0; i < dependencies.length; i++) {
+        var dependency = dependencies[i];
+        if (!listeningSet.has(dependency)) {
+            switch (dependency) {
+                case TOP_SCROLL:
+                    trapCapturedEvent(TOP_SCROLL, mountAt);
+                    break;
+                case TOP_FOCUS:
+                case TOP_BLUR:
+                    trapCapturedEvent(TOP_FOCUS, mountAt);
+                    trapCapturedEvent(TOP_BLUR, mountAt);
+                    // We set the flag for a single dependency later in this function,
+                    // but this ensures we mark both as attached rather than just one.
+                    listeningSet.add(TOP_BLUR);
+                    listeningSet.add(TOP_FOCUS);
+                    break;
+                case TOP_CANCEL:
+                case TOP_CLOSE:
+                    if (isEventSupported(getRawEventName(dependency))) {
+                        trapCapturedEvent(dependency, mountAt);
+                    }
+                    break;
+                case TOP_INVALID:
+                case TOP_SUBMIT:
+                case TOP_RESET:
+                    // We listen to them on the target DOM elements.
+                    // Some of them bubble so we don't want them to fire twice.
+                    break;
+                default:
+                    // By default, listen on the top level to all non-media events.
+                    // Media events don't bubble so adding the listener wouldn't do anything.
+                    var isMediaEvent = mediaEventTypes.indexOf(dependency) !== -1;
+                    if (!isMediaEvent) {
+                        trapBubbledEvent(dependency, mountAt);
+                    }
+                    break;
+            }
+            listeningSet.add(dependency);
+        }
     }
-    return new EventConstructor(
-        dispatchConfig,
-        targetInst,
-        nativeEvent,
-        nativeInst,
-    );
 }
-
-function releasePooledEvent(event) {
-    const EventConstructor = this;
-    event.destructor();
-    if (EventConstructor.eventPool.length < EVENT_POOL_SIZE) {
-        EventConstructor.eventPool.push(event);
-    }
-}
-
-function addEventPoolingTo(EventConstructor) {
-    EventConstructor.eventPool = [];
-    EventConstructor.getPooled = getPooledEvent;
-    EventConstructor.release = releasePooledEvent;
-}
-
-export default SyntheticEvent;

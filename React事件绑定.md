@@ -21,7 +21,7 @@ React自己实现了一套高效的事件注册，存储，分发和重用逻辑
 - EventPluginHub：负责事件的存储及分发。
 - Plugin：根据不同的事件类型构造不同的合成事件。
 
-这里有一个[动画]([https://www.lzane.com/tech/react-event-system-and-source-code/#%E4%BA%8B%E4%BB%B6%E8%A7%A6%E5%8F%91](https://www.lzane.com/tech/react-event-system-and-source-code/#事件触发))，应该对理解有写帮助。看完之后，我们来看看代码上的实现
+这里有一个[动画](https://www.lzane.com/tech/react-event-system-and-source-code/#%E4%BA%8B%E4%BB%B6%E8%A7%A6%E5%8F%91)，应该对理解有写帮助。看完之后，我们来看看代码上的实现
 
 第一步就是注册了，注册时机我想不用多说，和挂载props同一时间做的，很显然，绑定事件也是作为props的一部分，看看我们上一节处理这个过程的函数
 
@@ -39,15 +39,85 @@ function finalizeInitialChildren (domElement, props) {
 }
 ```
 
-上一节细心的朋友可能会发现，这里并没有对事件的处理和绑定，我们这一节就来加上，给它加上一个else分支
+上一节细心的朋友可能会发现，这里并没有对事件的处理和绑定，我们这一节就来加上
 
 ```js
-else if (registrationNames.includes(propKey) || propKey === 'onChange') {
-  let eventType = propKey.slice(2).toLocaleLowerCase()
-  if (eventType.endsWith('capture')) {
-    eventType = eventType.slice(0, -7)
+const STYLE = 'style';
+const HTML = '__html';
+
+function setInitialDOMProperties(
+  tag: string,
+  domElement: Element,
+  rootContainerElement,
+  nextProps,
+  isCustomComponentTag,
+) {
+  for (const propKey in nextProps) {
+    if (!nextProps.hasOwnProperty(propKey)) {
+      continue;
+    }
+    const nextProp = nextProps[propKey];
+    if (propKey === STYLE) {
+      setValueForStyles(domElement, nextProp);
+      // 这里省略n多个else if
+    } else if (registrationNameModules.hasOwnProperty(propKey)) {
+      if (nextProp != null) {
+        ensureListeningTo(rootContainerElement, propKey);
+      }
+    }
   }
-  document.addEventListener(eventType, dispatchEventWithBatch)
+}
+```
+
+这里我们针对不同类型的组件，都是调用了trapBubbledEvent这个方法去捕捉冒泡事件，然后传入各自的类型，接下来看看trapBubbledEvent的实现，
+
+
+
+```js
+function ensureListeningTo () {
+  const listeningSet = getListeningSetForElement(mountAt);
+  const dependencies = registrationNameDependencies[registrationName];
+
+  for (let i = 0; i < dependencies.length; i++) {
+    const dependency = dependencies[i];
+    if (!listeningSet.has(dependency)) {
+      switch (dependency) {
+        case TOP_SCROLL:
+          trapCapturedEvent(TOP_SCROLL, mountAt);
+          break;
+        case TOP_FOCUS:
+        case TOP_BLUR:
+          trapCapturedEvent(TOP_FOCUS, mountAt);
+          trapCapturedEvent(TOP_BLUR, mountAt);
+          // We set the flag for a single dependency later in this function,
+          // but this ensures we mark both as attached rather than just one.
+          listeningSet.add(TOP_BLUR);
+          listeningSet.add(TOP_FOCUS);
+          break;
+        case TOP_CANCEL:
+        case TOP_CLOSE:
+          if (isEventSupported(getRawEventName(dependency))) {
+            trapCapturedEvent(dependency, mountAt);
+          }
+          break;
+        case TOP_INVALID:
+        case TOP_SUBMIT:
+        case TOP_RESET:
+          // We listen to them on the target DOM elements.
+          // Some of them bubble so we don't want them to fire twice.
+          break;
+        default:
+          // By default, listen on the top level to all non-media events.
+          // Media events don't bubble so adding the listener wouldn't do anything.
+          const isMediaEvent = mediaEventTypes.indexOf(dependency) !== -1;
+          if (!isMediaEvent) {
+            trapBubbledEvent(dependency, mountAt);
+          }
+          break;
+      }
+      listeningSet.add(dependency);
+    }
+  }
 }
 ```
 
