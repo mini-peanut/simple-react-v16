@@ -110,8 +110,6 @@ function getListeningSetForElement(element) {
 
 addEventPoolingTo(SyntheticEvent);
 
-
-
 export function ensureListeningTo (mountAt, registrationName) {
     var listeningSet = getListeningSetForElement(mountAt);
     var dependencies = registrationNameDependencies[registrationName];

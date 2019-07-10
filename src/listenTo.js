@@ -1,6 +1,6 @@
 function listenTo(registrationName, mountAt) {
     const listeningSet = getListeningSetForElement(mountAt);
-    const dependencies = registrationNameDependencies[registrationName];
+    const dependencies =  [registrationName];
 
     for (let i = 0; i < dependencies.length; i++) {
         const dependency = dependencies[i];

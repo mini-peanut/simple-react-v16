@@ -6332,8 +6332,9 @@
    *
    * @param {string} registrationName Name of listener (e.g. `onClick`).
    * @param {object} mountAt Container where to mount the listener
-   */
+   */release
   function listenTo(registrationName, mountAt) {
+    debugger
     var listeningSet = getListeningSetForElement(mountAt);
     var dependencies = registrationNameDependencies[registrationName];
 
